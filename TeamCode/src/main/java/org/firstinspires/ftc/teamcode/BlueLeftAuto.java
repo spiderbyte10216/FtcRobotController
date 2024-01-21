@@ -224,14 +224,14 @@ public class BlueLeftAuto extends LinearOpMode {
                     }
                     if (position != null) {
                         if (position.x > 640) {
-                            auto.strafeRight(2000, 0.5);
+                            auto.strafeRight(500, 0.5);
                         } else if (position.x < 640) {
-                            auto.strafeLeft(2000,0.5);
+                            auto.strafeLeft(500,0.5);
                         }
                     }
 
-                    auto.moveForward(2000,0.5);
-                    moveToBackboard -= 2000;
+                    auto.moveForward(500,0.5);
+                    moveToBackboard -= 500;
                     if (moveToBackboard < 0) {
                         state = states.PLACE_PIXEL_ON_BACKDROP;
                     }

@@ -3,183 +3,163 @@ package org.firstinspires.ftc.teamcode;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import java.util.List;
-import java.util.ArrayList;
+
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 
 import org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion;
-import org.firstinspires.ftc.robotcore.external.ExportToBlocks;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
 import org.firstinspires.ftc.vision.VisionProcessor;
-import org.opencv.core.Size;
-import org.opencv.core.Point;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
-import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
-
-public class CSVisionProcessor  extends BlocksOpModeCompanion implements VisionProcessor{
-    //uncomment and determine the correct starting rectangles for your robot (If Using Java or this class directly)
-    private Rect rectLeft;// =
-    // ew Rect(100, 202, 80, 80);
-    private Rect rectMiddle;// = new Rect(200, 202, 80, 80);
-
-    private Rect rectRight;// = new Rect(300, 202, 80, 80);
+import java.util.ArrayList;
+import java.util.List;
 
 
-
+public class CSVisionProcessor extends BlocksOpModeCompanion implements VisionProcessor {
     StartingPosition selection = StartingPosition.NONE;
+    FtcDashboard ftcDashboard;
 
-    Mat submat = new Mat();
-    Mat hsvMat = new Mat();
+    Telemetry telemetry;
+    CameraStreamSource camera;
 
-    private static CSVisionProcessor _csVision;
 
-    @ExportToBlocks(
-            comment = "Custom CenterStage Vision Processor",
-            tooltip = "Auto OpMode Vision",
-            parameterLabels = {}
-            //parameterLabels = {"Width", "Left X", "Left Y", "Middle X", "Middle Y", "Right X", "Right Y"}
-    )
-    public static VisionProcessor getCSVision(
-            int width,
-            int leftX, int leftY,
-            int middleX, int middleY,
-            int rightX, int rightY
-    ){
-        _csVision = new CSVisionProcessor(width, leftX, leftY, middleX, middleY, rightX, rightY);
-        return _csVision;
+
+
+    final int leftTh = 425;
+    final int rightTh = 850;
+    final int upperTh = 200;
+    final int lowerTh = 500;
+
+    final int width = 1280;
+    final int height = 720;
+
+    public StartingPosition getPosition() {
+        return selection;
     }
 
-    @ExportToBlocks(
-            comment = "Returns the current starting position",
-            tooltip = "Auto OpMode Vision Position"
+    public int getIntPosition() {
+        StartingPosition pos = selection;
 
-    )
-    public static StartingPosition getPosition(){
-        return _csVision.getStartingPosition();
-    }
-
-    @ExportToBlocks(
-            comment = "Returns the current starting position as an integer",
-            tooltip = "Auto OpMode Vision Position"
-
-    )
-    public static int getIntPosition(){
-        StartingPosition pos = _csVision.getStartingPosition();
-
-        if(pos == StartingPosition.LEFT){
+        if (pos == StartingPosition.LEFT) {
             return 1;
-        }
-        else if(pos == StartingPosition.CENTER){
+        } else if (pos == StartingPosition.CENTER) {
             return 2;
-        }
-        else if(pos == StartingPosition.RIGHT){
+        } else if (pos == StartingPosition.RIGHT) {
             return 3;
         }
 
         return 0;
     }
 
-    public CSVisionProcessor(int width, int leftX, int leftY, int middleX, int middleY, int rightX, int rightY){
-        rectLeft = new Rect(leftX, leftY,width, width);
-        rectMiddle = new Rect(middleX, middleY, width, width);
-        rectRight = new Rect(rightX, rightY, width, width);
+    public CSVisionProcessor(Telemetry telemetry, CameraStreamSource camera) {
+        this.telemetry = telemetry;
+        this.camera = camera;
+
     }
 
 
     @Override
     public void init(int width, int height, CameraCalibration calibration) {
+        ftcDashboard = FtcDashboard.getInstance();
+        telemetry = new MultipleTelemetry(telemetry, ftcDashboard.getTelemetry());
+        ftcDashboard.startCameraStream(camera, 0);
     }
 
     @Override
     public Object processFrame(Mat frame, long captureTimeNanos) {
-        Imgproc.cvtColor(frame, hsvMat, Imgproc.COLOR_RGB2HSV);
-//
-//        double satRectLeft = getAvgSaturation(hsvMat, rectLeft);
-//        double satRectMiddle = getAvgSaturation(hsvMat, rectMiddle);
-//        double satRectRight = getAvgSaturation(hsvMat, rectRight);
-          double ilowH = 106;
-          double ilowS = 124;
-          double ilowV = 0;
+        List<Mat> mats = new ArrayList<Mat>();
+        Core.split(frame, mats);
 
-          double ihighH = 134;
-          double ihighS = 255;
-          double ihighV = 191;
-          Mat threshMat = new Mat();
-          Scalar lower_hsv = new Scalar(ilowH, ilowS, ilowV);
-          Scalar higher_hsv = new Scalar(ihighH, ihighS, ihighV);
-          Core.inRange(hsvMat, lower_hsv, higher_hsv, threshMat);
+        Mat hsvMat = new Mat();
+        Imgproc.cvtColor(frame, hsvMat, Imgproc.COLOR_RGB2HSV);
+
+        double ilowH = 106;
+        double ilowS = 124;
+        double ilowV = 0;
+
+        double ihighH = 134;
+        double ihighS = 255;
+        double ihighV = 191;
+        Mat threshMat = new Mat();
+        Scalar lower_hsv = new Scalar(ilowH, ilowS, ilowV);
+        Scalar higher_hsv = new Scalar(ihighH, ihighS, ihighV);
+        Core.inRange(hsvMat, lower_hsv, higher_hsv, threshMat);
 
         //apply morphology
-          Size kernel1 = new Size(9,9);
-          Size kernel2 = new Size(15,15);
-          Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, kernel1);
-          Mat cleanMat = new Mat();
-          Imgproc.morphologyEx(threshMat, cleanMat, Imgproc.MORPH_OPEN, kernel);
-          kernel = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, kernel2);
-          Imgproc.morphologyEx(cleanMat, cleanMat, Imgproc.MORPH_CLOSE, kernel);
+//        Size kernel1 = new Size(9, 9);
+//        Size kernel2 = new Size(15, 15);
+//        Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, kernel1);
+//        Mat cleanMat = new Mat();
+//        Imgproc.morphologyEx(threshMat, cleanMat, Imgproc.MORPH_OPEN, kernel);
+//        kernel = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, kernel2);
+//        Imgproc.morphologyEx(cleanMat, cleanMat, Imgproc.MORPH_CLOSE, kernel);
 
-        // get external contours
-          List<MatOfPoint> contours = new ArrayList<>();
-          Mat hierarchy = new Mat();
-          Imgproc.findContours(cleanMat, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
-//          contours = contours[0] if len(contours) == 2 else contours[1]
+        telemetry.addData("clean mat size cols", hsvMat.cols());
+        telemetry.addData("clean mat size rows", hsvMat.rows());
 
-//        if ((satRectLeft > satRectMiddle) && (satRectLeft > satRectRight)) {
-//            selection = StartingPosition.LEFT;
-//
-//        }else if ((satRectMiddle > satRectLeft) && (satRectMiddle > satRectRight)){
-//            selection = StartingPosition.CENTER;
-//
-//        }else if ((satRectRight > satRectMiddle) && (satRectRight > satRectLeft)){
-//            selection = StartingPosition.RIGHT;
-//        }else{
-
+        int leftCounter = 0;
+        int rightCounter = 0;
+        int centerCounter = 0;
+        for (int i = 0; i < threshMat.cols(); i++) {
+            for (int j = 0; j < threshMat.rows(); j++) {
+                if (i > 0 && i < leftTh && j > upperTh && j < lowerTh && threshMat.get(j, i) != null) {
+                    leftCounter += threshMat.get(j, i)[0];
+                }
+                else if (i > leftTh && i < rightTh && j > upperTh && j < lowerTh && threshMat.get(j, i) != null) {
+                    centerCounter += threshMat.get(j, i)[0];
+                }
+                else if (j > upperTh && j < lowerTh && threshMat.get(j, i) != null) {
+                    rightCounter += threshMat.get(j, i)[0];
+                }
+            }
+        }
+        telemetry.addData("Left Counter", leftCounter);
+        telemetry.addData("Center Counter", centerCounter);
+        telemetry.addData("Right Counter", rightCounter);
+        telemetry.update();
+        if (leftCounter > centerCounter && leftCounter > rightCounter) {
+            selection = StartingPosition.LEFT;
+            return selection;
+        } else if (rightCounter > centerCounter && rightCounter > leftCounter) {
+            selection = StartingPosition.RIGHT;
+            return selection;
+        } else if (centerCounter > leftCounter && centerCounter > rightCounter) {
+            selection = StartingPosition.CENTER;
+            return selection;
+        } else {
             selection = StartingPosition.NONE;
-//        }
+            return selection;
+        }
 
-        return selection;
     }
 
-    protected double getAvgSaturation(Mat input, Rect rect) {
-        submat = input.submat(rect);
-        Scalar color = Core.mean(submat);
-        return color.val[1];
-    }
-
-    private android.graphics.Rect makeGraphicsRect(Rect rect, float  scaleBmpPxToCanvasPx) {
-        int left = Math.round(rect.x * scaleBmpPxToCanvasPx);
-
-        int top = Math.round(rect.y * scaleBmpPxToCanvasPx);
-        int right = left + Math.round(rect.width * scaleBmpPxToCanvasPx);
-
-        int bottom = top + Math.round(rect.height * scaleBmpPxToCanvasPx);
-
-        return new android.graphics.Rect(left, top, right, bottom);
-    }
 
     @Override
-    public void onDrawFrame(Canvas canvas, int onscreenWidth, int onscreenHeight, float scaleBmpPxToCanvasPx, float scaleCanvasDensity, Object userContext)
-    {
+    public void onDrawFrame(Canvas canvas, int onscreenWidth, int onscreenHeight,
+                            float scaleBmpPxToCanvasPx, float scaleCanvasDensity, Object userContext) {
         Paint selectedPaint = new Paint();
-        selectedPaint.setColor(Color.RED);
+        selectedPaint.setColor(Color.GREEN);
         selectedPaint.setStyle(Paint.Style.STROKE);
         selectedPaint.setStrokeWidth(scaleCanvasDensity * 4);
 
         Paint nonSelected = new Paint();
         nonSelected.setStrokeWidth(scaleCanvasDensity * 4);
         nonSelected.setStyle(Paint.Style.STROKE);
-        nonSelected.setColor(Color.GREEN);
+        nonSelected.setColor(Color.RED);
 
-        android.graphics.Rect drawRectangleLeft = makeGraphicsRect(rectLeft, scaleBmpPxToCanvasPx);
-        android.graphics.Rect drawRectangleMiddle = makeGraphicsRect(rectMiddle, scaleBmpPxToCanvasPx);
-        android.graphics.Rect drawRectangleRight = makeGraphicsRect(rectRight, scaleBmpPxToCanvasPx);
+        android.graphics.Rect drawRectangleLeft = new android.graphics.Rect(0, upperTh, leftTh, lowerTh);
+        android.graphics.Rect drawRectangleMiddle = new android.graphics.Rect(leftTh, upperTh, rightTh, lowerTh);
+        android.graphics.Rect drawRectangleRight = new android.graphics.Rect(rightTh, upperTh, width, lowerTh);
 
         selection = (StartingPosition) userContext;
 
-        switch(selection){
+        switch (selection) {
             case LEFT:
                 canvas.drawRect(drawRectangleLeft, selectedPaint);
                 canvas.drawRect(drawRectangleMiddle, nonSelected);
@@ -206,15 +186,16 @@ public class CSVisionProcessor  extends BlocksOpModeCompanion implements VisionP
 
     }
 
-    public StartingPosition getStartingPosition(){
+    public StartingPosition getStartingPosition() {
         return selection;
     }
 
-    public enum StartingPosition{
+    public enum StartingPosition {
         NONE,
         LEFT,
         RIGHT,
         CENTER
     }
+
 
 }

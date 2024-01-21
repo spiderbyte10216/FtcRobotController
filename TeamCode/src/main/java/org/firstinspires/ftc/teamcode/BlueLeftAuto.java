@@ -147,7 +147,7 @@ public class BlueLeftAuto extends LinearOpMode {
 
 
 
-                    state = states.BACK_INTO_WALL;
+                    state = states.GO_TO_BACKBOARD;
                     break;
 
                 case PLACE_PIXEL_CENTER:
@@ -155,7 +155,7 @@ public class BlueLeftAuto extends LinearOpMode {
                         state = states.STOP;
                         break;
                     }
-                    state = states.BACK_INTO_WALL;
+                    state = states.GO_TO_BACKBOARD;
                     break;
 
                 case PLACE_PIXEL_RIGHT:
@@ -163,25 +163,28 @@ public class BlueLeftAuto extends LinearOpMode {
                         state = states.STOP;
                         break;
                     }
-                    state = states.BACK_INTO_WALL;
-                    break;
-
-                case BACK_INTO_WALL:
-                    if(autoOver()) {
-                        state = states.STOP;
-                        break;
-                    }
-                    auto.moveBackward(1000,0.5);
                     state = states.GO_TO_BACKBOARD;
                     break;
+
+//                case BACK_INTO_WALL:
+//                    if(autoOver()) {
+//                        state = states.STOP;
+//                        break;
+//                    }
+//                    auto.moveBackward(1000,0.5);
+//                    state = states.GO_TO_BACKBOARD;
+//                    break;
+
                 case GO_TO_BACKBOARD:
                     if(autoOver()) {
                         state = states.STOP;
                         break;
                     }
-                    auto.moveForward(500, 0.5);
-                    auto.turnCounterClockwise(500,0.5);
-                    auto.moveForward(1000,0.5);
+                    auto.moveBackward(3000,0.5);
+                    auto.moveForward(2000,0.5);
+                    auto.strafeRight(2000,0.5);
+
+
                     state = states.CHECK_DISTANCE;
                     break;
                 case CHECK_DISTANCE:
@@ -242,7 +245,7 @@ public class BlueLeftAuto extends LinearOpMode {
                         state = states.STOP;
                         break;
                     }
-                    auto.moveForward(500,0.5);
+                    auto.turnCounterClockwise(2000,0.5);
                     //raise lift
                     //place claw against backboard
                     //open claw to place pixel
@@ -253,8 +256,9 @@ public class BlueLeftAuto extends LinearOpMode {
                         state = states.STOP;
                         break;
                     }
-                    auto.strafeRight(1000,0.5);
-                    auto.moveForward(500,0.5);
+                    auto.moveBackward(500,0.5);
+                    auto.strafeRight(2000,0.5);
+                    auto.moveForward(1500,0.5);
                     state = states.STOP;
                     break;
                 case STOP:

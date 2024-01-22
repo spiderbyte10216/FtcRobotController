@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Lift {
-    DcMotor liftMotor;
+    static DcMotor liftMotor;
     ElapsedTime runtime;
     Telemetry telemetry;
     Lift(DcMotor liftMotor, ElapsedTime runtime, Telemetry telemetry){
@@ -21,7 +21,7 @@ public class Lift {
 
     }
 
-    public void slightlyLift(){
+    public static void slightlyLift(){
         liftMotor.setTargetPosition(150);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         liftMotor.setPower(0.35);
@@ -29,8 +29,8 @@ public class Lift {
 
     }
 
-    public void backboardLift(){
-        liftMotor.setTargetPosition(1125);
+    public static void backboardLift(){
+        liftMotor.setTargetPosition(1500);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         liftMotor.setPower(0.35);
 

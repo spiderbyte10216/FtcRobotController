@@ -24,6 +24,7 @@ public class TeleOp1_21_24 extends LinearOpMode {
     private DcMotor actuator;
     private ElapsedTime runtime = new ElapsedTime();
     private Lift lift;
+    private Servo drone = null;
 
     @Override
     public void runOpMode() {
@@ -39,6 +40,7 @@ public class TeleOp1_21_24 extends LinearOpMode {
         leftBack = hardwareMap.get(DcMotor.class, "backLeft");
         rightBack = hardwareMap.get(DcMotor.class, "backRight");
         actuator = hardwareMap.get(DcMotor.class, "actuator");
+        drone = hardwareMap.get(Servo.class, "drone");
 
         lift = new Lift(liftMotor, runtime, telemetry);
 
@@ -77,7 +79,7 @@ public class TeleOp1_21_24 extends LinearOpMode {
             double actuatorPower = 0.7;
             y = gamepad1.x?-0.75:gamepad1.b?0.75:0; //turning left and right
             x = gamepad1.dpad_left?0.75:gamepad1.dpad_right?-0.75:0; //strafe left and right
-            r = gamepad1.dpad_up?0.75:gamepad1.dpad_down?-0.75:0; //strafe forward and backward
+            r = gamepad1.dpad_up?-0.75:gamepad1.dpad_down?0.75:0; //strafe forward and backward
             String message = "";
             message += x;
             message += ",";
@@ -130,6 +132,8 @@ public class TeleOp1_21_24 extends LinearOpMode {
 
             if (gamepad2.dpad_down){
                 servoFlip.setPosition(0.4);
+                rightClawOpen.setPosition(0.4);
+                leftClawOpen.setPosition(1);
                 lift.flatStartLift();
             }
             else if (gamepad2.dpad_up){
@@ -149,6 +153,10 @@ public class TeleOp1_21_24 extends LinearOpMode {
             if(gamepad2.y){
                 servoFlip.setPosition(0.4);
             }
+
+            if (gamepad2.a) {
+                drone.setPosition(0.4);
+            }
             /*if ((gamepad2.left_stick_y>0.1)) {
                 liftMotor.setDirection(DcMotor.Direction.REVERSE);
                 liftMotor.setPower(liftPower);
@@ -162,19 +170,19 @@ public class TeleOp1_21_24 extends LinearOpMode {
                 sleep(1);
                 liftMotor.setPower(0);
             }*/
-            if (gamepad1.dpad_up){
-                actuator.setDirection(DcMotor.Direction.FORWARD);
+            if (gamepad1.left_bumper && gamepad1.right_bumper){
+                actuator.setDirection(DcMotor.Direction.REVERSE);
                 actuator.setPower(liftPower);
                 sleep(1000);
                 actuator.setPower(0);
             }
-            if (gamepad1.dpad_down){
-                actuator.setDirection(DcMotor.Direction.REVERSE);
+            else if (gamepad1.left_bumper){
+                actuator.setDirection(DcMotor.Direction.FORWARD);
                 actuator.setPower(actuatorPower);
                 sleep(1000);
                 actuator.setPower(0);
             }
-            if (gamepad1.dpad_right){
+            else if (gamepad1.right_bumper){
                 actuatorFlip.setPosition(0.9);
             }
 

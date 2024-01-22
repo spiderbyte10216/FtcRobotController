@@ -143,9 +143,8 @@ public class BlueLeftAuto extends LinearOpMode {
                         state = states.STOP;
                         break;
                     }
-                    auto.strafeLeft(3500,0.5);
-
-
+                    Lift.slightlyLift();
+                    auto.moveForward(500,0.5);
 
                     state = states.GO_TO_BACKBOARD;
                     break;
@@ -155,6 +154,9 @@ public class BlueLeftAuto extends LinearOpMode {
                         state = states.STOP;
                         break;
                     }
+                    auto.strafeRight(500,0.5);
+                    auto.moveForward(1000,0.5);
+
                     state = states.GO_TO_BACKBOARD;
                     break;
 
@@ -163,6 +165,10 @@ public class BlueLeftAuto extends LinearOpMode {
                         state = states.STOP;
                         break;
                     }
+
+                    auto.strafeRight(1000,0.5);
+                    auto.moveForward(500,0.5);
+
                     state = states.GO_TO_BACKBOARD;
                     break;
 

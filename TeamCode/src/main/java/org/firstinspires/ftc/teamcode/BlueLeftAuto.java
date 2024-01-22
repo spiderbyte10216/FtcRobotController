@@ -202,20 +202,21 @@ public class BlueLeftAuto extends LinearOpMode {
                     auto.moveBackward(3000,0.5);
                     auto.moveForward(2000,0.5);
                     auto.strafeRight(2000,0.5);
+                    auto.turnCounterClockwise(1500,0.5);
 
 
-                    state = states.CHECK_DISTANCE;
-                    break;
-                case CHECK_DISTANCE:
-                    if(autoOver()) {
-                        state = states.STOP;
-                        break;
-                    }
-                    //check distance from backdrop
-                    //if too close move backwards
-                    //if too far move forwards
                     state = states.STRAFE_SCAN;
                     break;
+//                case CHECK_DISTANCE:
+//                    if(autoOver()) {
+//                        state = states.STOP;
+//                        break;
+//                    }
+//                    //check distance from backdrop
+//                    //if too close move backwards
+//                    //if too far move forwards
+//                    state = states.STRAFE_SCAN;
+//                    break;
                 case STRAFE_SCAN:
                     if(autoOver()) {
                         state = states.STOP;
@@ -265,6 +266,9 @@ public class BlueLeftAuto extends LinearOpMode {
                         break;
                     }
                     auto.turnCounterClockwise(2000,0.5);
+                    Lift.backboardLift();
+                    Claw.setLeftClawOpen();
+                    Claw.closeBothClaws();
                     //raise lift
                     //place claw against backboard
                     //open claw to place pixel
@@ -275,6 +279,7 @@ public class BlueLeftAuto extends LinearOpMode {
                         state = states.STOP;
                         break;
                     }
+                    Lift.slightlyLift();
                     auto.moveBackward(500,0.5);
                     auto.strafeRight(2000,0.5);
                     auto.moveForward(1500,0.5);

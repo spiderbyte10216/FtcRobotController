@@ -134,13 +134,13 @@ public class TeleOp1_21_24 extends LinearOpMode {
                 servoFlip.setPosition(0.4);
                 rightClawOpen.setPosition(0.4);
                 leftClawOpen.setPosition(1);
-                lift.flatStartLift();
+                Lift.flatStartLift();
             }
             else if (gamepad2.dpad_up){
-                lift.backboardLift();
+                Lift.backboardLift();
             }
             else if (gamepad2.dpad_left){
-                lift.slightlyLift();
+                Lift.slightlyLift();
             }
 
             if(gamepad2.x){

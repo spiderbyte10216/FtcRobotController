@@ -28,6 +28,4 @@ public abstract class driveTrain {
     public abstract void strafeLeft(int milliseconds, double power);
     public abstract void strafeRight(int milliseconds, double power);
 
-    //Don't know if right
-    public abstract void
 }

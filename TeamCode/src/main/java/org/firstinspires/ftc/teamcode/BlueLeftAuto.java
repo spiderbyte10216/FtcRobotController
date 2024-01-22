@@ -145,6 +145,10 @@ public class BlueLeftAuto extends LinearOpMode {
                     }
                     Lift.slightlyLift();
                     auto.moveForward(500,0.5);
+                    Lift.flatStartLift();
+                    Claw.setRightClawOpen();
+                    Claw.closeBothClaws();
+                    Lift.slightlyLift();
 
                     state = states.GO_TO_BACKBOARD;
                     break;
@@ -154,8 +158,13 @@ public class BlueLeftAuto extends LinearOpMode {
                         state = states.STOP;
                         break;
                     }
+                    Lift.slightlyLift();
                     auto.strafeRight(500,0.5);
                     auto.moveForward(1000,0.5);
+                    Lift.flatStartLift();
+                    Claw.setRightClawOpen();
+                    Claw.closeBothClaws();
+                    Lift.slightlyLift();
 
                     state = states.GO_TO_BACKBOARD;
                     break;
@@ -165,9 +174,13 @@ public class BlueLeftAuto extends LinearOpMode {
                         state = states.STOP;
                         break;
                     }
-
+                    Lift.slightlyLift();
                     auto.strafeRight(1000,0.5);
                     auto.moveForward(500,0.5);
+                    Lift.flatStartLift();
+                    Claw.setRightClawOpen();
+                    Claw.closeBothClaws();
+                    Lift.slightlyLift();
 
                     state = states.GO_TO_BACKBOARD;
                     break;

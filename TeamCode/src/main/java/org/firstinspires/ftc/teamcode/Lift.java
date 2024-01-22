@@ -36,7 +36,7 @@ public class Lift {
 
     }
 
-    public void flatStartLift(){
+    public static void flatStartLift(){
         liftMotor.setTargetPosition(0);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         liftMotor.setPower(0.35);

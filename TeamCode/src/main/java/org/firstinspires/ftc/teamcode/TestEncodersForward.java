@@ -4,9 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+
 import org.firstinspires.ftc.teamcode.DriveTrain.MecanumDrive;
 
 @Autonomous(name="Test Encoders Forward", group= "Robot")
@@ -42,7 +41,7 @@ public class TestEncodersForward extends LinearOpMode{
 
         waitForStart();
 
-        MecanumDrive auto = new MecanumDrive(leftFront, rightFront, leftBack, rightBack, runtime, telemetry);
+        MecanumDrive auto = new MecanumDrive(leftFront, rightFront, leftBack, rightBack, runtime, telemetry, this);
 
         auto.moveForward(3000, 0.5);
 

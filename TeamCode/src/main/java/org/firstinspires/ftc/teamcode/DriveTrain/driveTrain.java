@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.DriveTrain;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -12,13 +13,16 @@ public abstract class driveTrain {
     DcMotor rightBack;
     ElapsedTime runtime;
     Telemetry telemetry;
-    driveTrain(DcMotor leftFront, DcMotor rightFront, DcMotor leftBack, DcMotor rightBack, ElapsedTime runtime, Telemetry telemetry){
+
+    LinearOpMode opMode;
+    driveTrain(DcMotor leftFront, DcMotor rightFront, DcMotor leftBack, DcMotor rightBack, ElapsedTime runtime, Telemetry telemetry, LinearOpMode opMode){
         this.leftFront = leftFront;
         this.rightFront = rightFront;
         this.leftBack = leftBack;
         this.rightBack = rightBack;
         this.runtime = runtime;
         this.telemetry = telemetry;
+        this.opMode = opMode;
     }
 
     public abstract void moveForward(int milliseconds, double power);

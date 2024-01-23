@@ -32,12 +32,18 @@ public class BlueLeftAuto extends LinearOpMode {
     private DcMotor leftFront = null;
     private DcMotor rightFront = null;
 
-    private DcMotor leftLift = null;
-    private DcMotor rightLift = null;
+    //private DcMotor leftLift = null;
+    //private DcMotor rightLift = null;
+    private DcMotor liftMotor = null;
 
     private Servo servoFlip = null;
-    private Servo clawOpen = null;
+    private Servo rightClawOpen = null;
+    private Servo leftClawOpen = null;
     private ElapsedTime runtime = new ElapsedTime();
+
+    private CSVisionProcessor visionProcessor;
+
+    private VisionPortal visionPortal;
     private enum states {
         CHECK_SPIKES,
         PLACE_PIXEL_CENTER,
@@ -56,14 +62,25 @@ public class BlueLeftAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        state = states.CHECK_SPIKES;
+        state = states.PLACE_PIXEL_LEFT;
         rightFront = hardwareMap.get(DcMotor.class, "frontRight");
         leftFront = hardwareMap.get(DcMotor.class, "frontLeft");
         leftBack = hardwareMap.get(DcMotor.class, "backLeft");
         rightBack = hardwareMap.get(DcMotor.class, "backRight");
 
+        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
+        leftFront.setDirection(DcMotorSimple.Direction.FORWARD);
         rightFront.setDirection(DcMotorSimple.Direction.FORWARD);
         leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
         rightBack.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -72,22 +89,26 @@ public class BlueLeftAuto extends LinearOpMode {
         //attachments
         //Add lifts + servo motors to Configuration
 
-        leftLift = hardwareMap.get(DcMotor.class, "leftLift");
-        rightLift = hardwareMap.get(DcMotor.class, "rightLift");
+        //leftLift = hardwareMap.get(DcMotor.class, "leftLift");
+        //rightLift = hardwareMap.get(DcMotor.class, "rightLift");
+        liftMotor = hardwareMap.get(DcMotor.class, "liftMotor");
 
-        clawOpen = hardwareMap.get(Servo.class, "clawOpen");
+        rightClawOpen = hardwareMap.get(Servo.class, "rightClawOpen");
         servoFlip = hardwareMap.get(Servo.class, "servoFlip");
-        clawOpen.setPosition(0.1);
-        servoFlip.setPosition(0.5);
+//        rightClawOpen.setPosition(0.1);
+//        leftClawOpen.setPosition(0.1);
+//        servoFlip.setPosition(0.5);
 
-        waitForStart();
 
-        MecanumDrive auto = new MecanumDrive(leftFront, rightFront, leftBack, rightBack, runtime, telemetry);
+
+        MecanumDrive auto = new MecanumDrive(leftFront, rightFront, leftBack, rightBack, runtime, telemetry, this);
+        Lift lift = new Lift(liftMotor, runtime, telemetry);
+        Claw claw = new Claw(rightClawOpen, leftClawOpen, servoFlip, runtime, telemetry);
         CSVisionProcessor.StartingPosition startingPosition = null;
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         OpenCvWebcam camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-        CSVisionProcessor visionProcessor = new CSVisionProcessor(telemetry, camera);
+        visionProcessor = new CSVisionProcessor(telemetry, camera);
         AprilTagProcessor aprilTagProcessor =  new AprilTagProcessor.Builder()
                 .setDrawAxes(true)
                 .setDrawCubeProjection(true)
@@ -96,16 +117,17 @@ public class BlueLeftAuto extends LinearOpMode {
                 .setTagLibrary(AprilTagGameDatabase.getCenterStageTagLibrary())
                 .setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES)
                 .build();
-        VisionPortal visionPortal = new VisionPortal.Builder()
+        visionPortal = new VisionPortal.Builder()
                 .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
                 .addProcessor(visionProcessor)
                 .setCameraResolution(new Size(1280, 720))
                 .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
                 .build();
 
+        waitForStart();
         int moveToBackboard = 10000;
 
-        while (state != states.STOP) {
+        while (state != states.STOP && opModeIsActive()) {
             switch (state) {
                 case CHECK_SPIKES:
                     if(autoOver()) {
@@ -117,7 +139,7 @@ public class BlueLeftAuto extends LinearOpMode {
                     visionPortal.setProcessorEnabled(aprilTagProcessor, false);
                     visionPortal.setProcessorEnabled(visionProcessor, true);
 
-                    while (visionProcessor.getPosition() == null) {
+                    while (visionProcessor.getPosition() == null && opModeIsActive()) {
                         telemetry.addLine("starting pos is null");
                         telemetry.update();
                         if(autoOver()) {
@@ -139,16 +161,18 @@ public class BlueLeftAuto extends LinearOpMode {
                     break;
 
                 case PLACE_PIXEL_LEFT:
+                    telemetry.addData("State: ", state);
+                    telemetry.update();
                     if(autoOver()) {
                         state = states.STOP;
                         break;
                     }
-                    Lift.slightlyLift();
+                    lift.slightlyLift();
                     auto.moveForward(500,0.5);
-                    Lift.flatStartLift();
-                    Claw.setRightClawOpen();
-                    Claw.closeBothClaws();
-                    Lift.slightlyLift();
+                    lift.flatStartLift();
+                    claw.setRightClawOpen();
+                    claw.closeBothClaws();
+                    lift.slightlyLift();
 
                     state = states.GO_TO_BACKBOARD;
                     break;
@@ -158,13 +182,13 @@ public class BlueLeftAuto extends LinearOpMode {
                         state = states.STOP;
                         break;
                     }
-                    Lift.slightlyLift();
+                    lift.slightlyLift();
                     auto.strafeRight(500,0.5);
                     auto.moveForward(1000,0.5);
-                    Lift.flatStartLift();
-                    Claw.setRightClawOpen();
-                    Claw.closeBothClaws();
-                    Lift.slightlyLift();
+                    lift.flatStartLift();
+                    claw.setRightClawOpen();
+                    claw.closeBothClaws();
+                    lift.slightlyLift();
 
                     state = states.GO_TO_BACKBOARD;
                     break;
@@ -174,15 +198,15 @@ public class BlueLeftAuto extends LinearOpMode {
                         state = states.STOP;
                         break;
                     }
-                    Lift.slightlyLift();
+                    lift.slightlyLift();
                     auto.strafeRight(1000,0.5);
                     auto.moveForward(500,0.5);
-                    Lift.flatStartLift();
-                    Claw.setRightClawOpen();
-                    Claw.closeBothClaws();
-                    Lift.slightlyLift();
+                    lift.flatStartLift();
+                    claw.setRightClawOpen();
+                    claw.closeBothClaws();
+                    lift.slightlyLift();
 
-                    state = states.GO_TO_BACKBOARD;
+                    state = states.STOP;
                     break;
 
 //                case BACK_INTO_WALL:
@@ -199,10 +223,10 @@ public class BlueLeftAuto extends LinearOpMode {
                         state = states.STOP;
                         break;
                     }
-                    auto.moveBackward(3000,0.5);
-                    auto.moveForward(2000,0.5);
-                    auto.strafeRight(2000,0.5);
-                    auto.turnCounterClockwise(1500,0.5);
+//                    auto.moveBackward(3000,0.5);
+//                    auto.moveForward(2000,0.5);
+//                    auto.strafeRight(2000,0.5);
+//                    auto.turnCounterClockwise(1500,0.5);
 
 
                     state = states.STRAFE_SCAN;
@@ -253,11 +277,11 @@ public class BlueLeftAuto extends LinearOpMode {
                         }
                     }
 
-                    auto.moveForward(500,0.5);
-                    moveToBackboard -= 500;
-                    if (moveToBackboard < 0) {
-                        state = states.PLACE_PIXEL_ON_BACKDROP;
-                    }
+//                    auto.moveForward(500,0.5);
+//                    moveToBackboard -= 500;
+//                    if (moveToBackboard < 0) {
+//                        state = states.PLACE_PIXEL_ON_BACKDROP;
+//                    }
 
                     break;
                 case PLACE_PIXEL_ON_BACKDROP:
@@ -266,9 +290,9 @@ public class BlueLeftAuto extends LinearOpMode {
                         break;
                     }
                     auto.turnCounterClockwise(2000,0.5);
-                    Lift.backboardLift();
-                    Claw.setLeftClawOpen();
-                    Claw.closeBothClaws();
+                    lift.backboardLift();
+                    claw.setLeftClawOpen();
+                    claw.closeBothClaws();
                     //raise lift
                     //place claw against backboard
                     //open claw to place pixel
@@ -279,7 +303,7 @@ public class BlueLeftAuto extends LinearOpMode {
                         state = states.STOP;
                         break;
                     }
-                    Lift.slightlyLift();
+                    lift.slightlyLift();
                     auto.moveBackward(500,0.5);
                     auto.strafeRight(2000,0.5);
                     auto.moveForward(1500,0.5);

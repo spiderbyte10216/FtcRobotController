@@ -3,14 +3,15 @@ package org.firstinspires.ftc.teamcode.DriveTrain;
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class MecanumDrive extends driveTrain {
-    public MecanumDrive(DcMotor leftFront, DcMotor rightFront, DcMotor leftBack, DcMotor rightBack, ElapsedTime runtime, Telemetry telemetry) {
-        super(leftFront, rightFront, leftBack, rightBack, runtime, telemetry);
+    public MecanumDrive(DcMotor leftFront, DcMotor rightFront, DcMotor leftBack, DcMotor rightBack, ElapsedTime runtime, Telemetry telemetry, LinearOpMode opMode) {
+        super(leftFront, rightFront, leftBack, rightBack, runtime, telemetry, opMode);
     }
 
     @Override
@@ -132,7 +133,7 @@ public class MecanumDrive extends driveTrain {
         leftBack.setPower(p3);
         rightBack.setPower(p4);
         double startTime = runtime.milliseconds();
-        while (Math.abs(leftFront.getCurrentPosition()) < encoderTicks) {
+        while (Math.abs(leftFront.getCurrentPosition()) < encoderTicks && opMode.opModeIsActive()) {
             telemetry.addData("encoder ticks", leftFront.getCurrentPosition());
             telemetry.addData("p1", p1);
             telemetry.addData("p2", p2);

@@ -7,9 +7,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Claw {
-    static Servo rightClawOpen;
-    static Servo leftClawOpen;
-    static Servo servoFlip;
+    Servo rightClawOpen;
+    Servo leftClawOpen;
+    Servo servoFlip;
     ElapsedTime runtime;
     Telemetry telemetry;
     Claw(Servo rightClawOpen, Servo leftClawOpen, Servo servoFlip, ElapsedTime runtime, Telemetry telemetry){
@@ -22,33 +22,33 @@ public class Claw {
 
     }
 
-    public static void setRightClawOpen(){
+    public void setRightClawOpen(){
         rightClawOpen.setPosition(0.7);
 
 
     }
 
-    public static void setLeftClawOpen(){
+    public void setLeftClawOpen(){
         leftClawOpen.setPosition(0.7);
 
     }
 
-    public static void closeBothClaws(){
+    public void closeBothClaws(){
         leftClawOpen.setPosition(1);
         rightClawOpen.setPosition(0.4);
     }
 
-    public static void setServoFlipUp(){
+    public void setServoFlipUp(){
         servoFlip.setPosition(0.2);
     }
 
-    public static void setServoFlipDownBackboard(){
+    public void setServoFlipDownBackboard(){
         rightClawOpen.setPosition(0.4);
         leftClawOpen.setPosition(1);
         servoFlip.setPosition(0.7);
     }
 
-    public static void setServoFlipParallel(){
+    public void setServoFlipParallel(){
         servoFlip.setPosition(0.4);
     }
 }

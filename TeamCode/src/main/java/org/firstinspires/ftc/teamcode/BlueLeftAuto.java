@@ -44,6 +44,8 @@ public class BlueLeftAuto extends LinearOpMode {
     private CSVisionProcessor visionProcessor;
 
     private VisionPortal visionPortal;
+
+    private AprilTagProcessor aprilTagProcessor;
     private enum states {
         CHECK_SPIKES,
         PLACE_PIXEL_CENTER,
@@ -62,7 +64,7 @@ public class BlueLeftAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        state = states.PLACE_PIXEL_LEFT;
+        state = states.CHECK_SPIKES;
         rightFront = hardwareMap.get(DcMotor.class, "frontRight");
         leftFront = hardwareMap.get(DcMotor.class, "frontLeft");
         leftBack = hardwareMap.get(DcMotor.class, "backLeft");
@@ -109,7 +111,7 @@ public class BlueLeftAuto extends LinearOpMode {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         OpenCvWebcam camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         visionProcessor = new CSVisionProcessor(telemetry, camera);
-        AprilTagProcessor aprilTagProcessor =  new AprilTagProcessor.Builder()
+        aprilTagProcessor =  new AprilTagProcessor.Builder()
                 .setDrawAxes(true)
                 .setDrawCubeProjection(true)
                 .setDrawTagOutline(true)
@@ -120,6 +122,7 @@ public class BlueLeftAuto extends LinearOpMode {
         visionPortal = new VisionPortal.Builder()
                 .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
                 .addProcessor(visionProcessor)
+                .addProcessor(aprilTagProcessor)
                 .setCameraResolution(new Size(1280, 720))
                 .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
                 .build();
@@ -130,7 +133,7 @@ public class BlueLeftAuto extends LinearOpMode {
         while (state != states.STOP && opModeIsActive()) {
             switch (state) {
                 case CHECK_SPIKES:
-                    if(autoOver()) {
+                    if(!opModeIsActive()) {
                         state = states.STOP;
                         break;
                     }
@@ -138,11 +141,10 @@ public class BlueLeftAuto extends LinearOpMode {
 
                     visionPortal.setProcessorEnabled(aprilTagProcessor, false);
                     visionPortal.setProcessorEnabled(visionProcessor, true);
-
                     while (visionProcessor.getPosition() == null && opModeIsActive()) {
                         telemetry.addLine("starting pos is null");
                         telemetry.update();
-                        if(autoOver()) {
+                        if(!opModeIsActive()) {
                             state = states.STOP;
                             break;
                         }
@@ -157,28 +159,34 @@ public class BlueLeftAuto extends LinearOpMode {
                     } else {
                         state = states.PLACE_PIXEL_CENTER;
                     }
-                    visionPortal.stopStreaming();
+                    if(visionPortal.getCameraState() == VisionPortal.CameraState.STREAMING){
+                        visionPortal.stopStreaming();
+                    }
                     break;
 
                 case PLACE_PIXEL_LEFT:
                     telemetry.addData("State: ", state);
                     telemetry.update();
-                    if(autoOver()) {
+                    if(!opModeIsActive()) {
                         state = states.STOP;
                         break;
                     }
+
+
                     lift.slightlyLift();
                     auto.moveForward(500,0.5);
                     lift.flatStartLift();
-                    claw.setRightClawOpen();
-                    claw.closeBothClaws();
+//                    claw.setRightClawOpen();
+//                    claw.closeBothClaws();
                     lift.slightlyLift();
 
                     state = states.GO_TO_BACKBOARD;
                     break;
 
                 case PLACE_PIXEL_CENTER:
-                    if(autoOver()) {
+                    telemetry.addData("State: ", state);
+                    telemetry.update();
+                    if(!opModeIsActive()) {
                         state = states.STOP;
                         break;
                     }
@@ -186,31 +194,32 @@ public class BlueLeftAuto extends LinearOpMode {
                     auto.strafeRight(500,0.5);
                     auto.moveForward(1000,0.5);
                     lift.flatStartLift();
-                    claw.setRightClawOpen();
-                    claw.closeBothClaws();
+                    //claw.setRightClawOpen();
+                    //claw.closeBothClaws();
                     lift.slightlyLift();
-
                     state = states.GO_TO_BACKBOARD;
                     break;
 
                 case PLACE_PIXEL_RIGHT:
-                    if(autoOver()) {
+                    telemetry.addData("State: ", state);
+                    telemetry.update();
+                    if(!opModeIsActive()) {
                         state = states.STOP;
                         break;
                     }
                     lift.slightlyLift();
                     auto.strafeRight(1000,0.5);
                     auto.moveForward(500,0.5);
-                    lift.flatStartLift();
-                    claw.setRightClawOpen();
-                    claw.closeBothClaws();
+//                    lift.flatStartLift();
+//                    claw.setRightClawOpen();
+//                    claw.closeBothClaws();
                     lift.slightlyLift();
 
                     state = states.STOP;
                     break;
 
 //                case BACK_INTO_WALL:
-//                    if(autoOver()) {
+//                    if(!opModeIsActive()) {
 //                        state = states.STOP;
 //                        break;
 //                    }
@@ -219,20 +228,24 @@ public class BlueLeftAuto extends LinearOpMode {
 //                    break;
 
                 case GO_TO_BACKBOARD:
-                    if(autoOver()) {
+                    telemetry.addData("State: ", state);
+                    telemetry.update();
+                    if(!opModeIsActive()) {
                         state = states.STOP;
                         break;
                     }
-//                    auto.moveBackward(3000,0.5);
-//                    auto.moveForward(2000,0.5);
-//                    auto.strafeRight(2000,0.5);
-//                    auto.turnCounterClockwise(1500,0.5);
+
+
+                    auto.moveBackward(3000,0.5);
+                    auto.moveForward(2000,0.5);
+                    auto.strafeRight(2000,0.5);
+                    auto.turnCounterClockwise(1500,0.5);
 
 
                     state = states.STRAFE_SCAN;
                     break;
 //                case CHECK_DISTANCE:
-//                    if(autoOver()) {
+//                    if(!opModeIsActive()) {
 //                        state = states.STOP;
 //                        break;
 //                    }
@@ -242,7 +255,9 @@ public class BlueLeftAuto extends LinearOpMode {
 //                    state = states.STRAFE_SCAN;
 //                    break;
                 case STRAFE_SCAN:
-                    if(autoOver()) {
+                    telemetry.addData("State: ", state);
+                    telemetry.update();
+                    if(!opModeIsActive()) {
                         state = states.STOP;
                         break;
                     }
@@ -277,6 +292,8 @@ public class BlueLeftAuto extends LinearOpMode {
                         }
                     }
 
+                    state = states.PLACE_PIXEL_ON_BACKDROP;
+
 //                    auto.moveForward(500,0.5);
 //                    moveToBackboard -= 500;
 //                    if (moveToBackboard < 0) {
@@ -285,21 +302,25 @@ public class BlueLeftAuto extends LinearOpMode {
 
                     break;
                 case PLACE_PIXEL_ON_BACKDROP:
-                    if(autoOver()) {
+                    telemetry.addData("State: ", state);
+                    telemetry.update();
+                    if(!opModeIsActive()) {
                         state = states.STOP;
                         break;
                     }
                     auto.turnCounterClockwise(2000,0.5);
                     lift.backboardLift();
-                    claw.setLeftClawOpen();
-                    claw.closeBothClaws();
+                    //claw.setLeftClawOpen();
+                    //claw.closeBothClaws();
                     //raise lift
                     //place claw against backboard
                     //open claw to place pixel
                     state = states.PARK_TO_THE_RIGHT;
                     break;
                 case PARK_TO_THE_RIGHT:
-                    if(autoOver()) {
+                    telemetry.addData("State: ", state);
+                    telemetry.update();
+                    if(!opModeIsActive()) {
                         state = states.STOP;
                         break;
                     }
@@ -314,9 +335,5 @@ public class BlueLeftAuto extends LinearOpMode {
                     break;
             }
         }
-    }
-
-    private boolean autoOver() {
-        return opModeIsActive();
     }
 }

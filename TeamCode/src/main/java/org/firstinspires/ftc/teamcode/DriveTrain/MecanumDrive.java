@@ -47,7 +47,7 @@ public class MecanumDrive extends driveTrain {
         leftBack.setPower(p3);
         rightBack.setPower(p4);
         double startTime = runtime.milliseconds();
-        while ((runtime.milliseconds() - startTime) < milliseconds) {
+        while ((runtime.milliseconds() - startTime) < milliseconds && opMode.opModeIsActive()) {
 
         }
         leftFront.setPower(0);
@@ -89,7 +89,7 @@ public class MecanumDrive extends driveTrain {
         leftBack.setPower(p3);
         rightBack.setPower(p4);
         double startTime = runtime.milliseconds();
-        while ((runtime.milliseconds() - startTime) < milliseconds) {
+        while ((runtime.milliseconds() - startTime) < milliseconds && opMode.opModeIsActive()) {
 
         }
         leftFront.setPower(0);
@@ -134,12 +134,12 @@ public class MecanumDrive extends driveTrain {
         rightBack.setPower(p4);
         double startTime = runtime.milliseconds();
         while (Math.abs(leftFront.getCurrentPosition()) < encoderTicks && opMode.opModeIsActive()) {
-            telemetry.addData("encoder ticks", leftFront.getCurrentPosition());
-            telemetry.addData("p1", p1);
-            telemetry.addData("p2", p2);
-            telemetry.addData("p3", p3);
-            telemetry.addData("p4", p4);
-            telemetry.update();
+//            telemetry.addData("encoder ticks", leftFront.getCurrentPosition());
+//            telemetry.addData("p1", p1);
+//            telemetry.addData("p2", p2);
+//            telemetry.addData("p3", p3);
+//            telemetry.addData("p4", p4);
+//            telemetry.update();
         }
         leftFront.setPower(0);
         rightFront.setPower(0);
@@ -181,13 +181,13 @@ public class MecanumDrive extends driveTrain {
         leftBack.setPower(p3);
         rightBack.setPower(p4);
         double startTime = runtime.milliseconds();
-        while (Math.abs(leftFront.getCurrentPosition()) < encoderTicks) {
-            telemetry.addData("encoder ticks", leftFront.getCurrentPosition());
-            telemetry.addData("p1", p1);
-            telemetry.addData("p2", p2);
-            telemetry.addData("p3", p3);
-            telemetry.addData("p4", p4);
-            telemetry.update();
+        while (Math.abs(leftFront.getCurrentPosition()) < encoderTicks && opMode.opModeIsActive()) {
+//            telemetry.addData("encoder ticks", leftFront.getCurrentPosition());
+//            telemetry.addData("p1", p1);
+//            telemetry.addData("p2", p2);
+//            telemetry.addData("p3", p3);
+//            telemetry.addData("p4", p4);
+//            telemetry.update();
         }
         leftFront.setPower(0);
         rightFront.setPower(0);
@@ -229,13 +229,13 @@ public class MecanumDrive extends driveTrain {
         leftBack.setPower(p3);
         rightBack.setPower(p4);
         double startTime = runtime.milliseconds();
-        while (Math.abs(leftFront.getCurrentPosition()) < encoderTicks) {
-            telemetry.addData("encoder ticks", leftFront.getCurrentPosition());
-            telemetry.addData("p1", p1);
-            telemetry.addData("p2", p2);
-            telemetry.addData("p3", p3);
-            telemetry.addData("p4", p4);
-            telemetry.update();
+        while (Math.abs(leftFront.getCurrentPosition()) < encoderTicks && opMode.opModeIsActive()) {
+//            telemetry.addData("encoder ticks", leftFront.getCurrentPosition());
+//            telemetry.addData("p1", p1);
+//            telemetry.addData("p2", p2);
+//            telemetry.addData("p3", p3);
+//            telemetry.addData("p4", p4);
+//            telemetry.update();
         }
         leftFront.setPower(0);
         rightFront.setPower(0);
@@ -276,13 +276,13 @@ public class MecanumDrive extends driveTrain {
         leftBack.setPower(p3);
         rightBack.setPower(p4);
         double startTime = runtime.milliseconds();
-        while (Math.abs(leftFront.getCurrentPosition()) < encoderTicks) {
-            telemetry.addData("encoder ticks", leftFront.getCurrentPosition());
-            telemetry.addData("p1", p1);
-            telemetry.addData("p2", p2);
-            telemetry.addData("p3", p3);
-            telemetry.addData("p4", p4);
-            telemetry.update();
+        while (Math.abs(leftFront.getCurrentPosition()) < encoderTicks && opMode.opModeIsActive()) {
+//            telemetry.addData("encoder ticks", leftFront.getCurrentPosition());
+//            telemetry.addData("p1", p1);
+//            telemetry.addData("p2", p2);
+//            telemetry.addData("p3", p3);
+//            telemetry.addData("p4", p4);
+//            telemetry.update();
         }
         leftFront.setPower(0);
         rightFront.setPower(0);

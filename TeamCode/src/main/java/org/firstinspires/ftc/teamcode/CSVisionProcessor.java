@@ -4,9 +4,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
-import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-
 import org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
@@ -23,8 +20,8 @@ import java.util.List;
 
 public class CSVisionProcessor extends BlocksOpModeCompanion implements VisionProcessor {
     StartingPosition selection = StartingPosition.NONE;
-    FtcDashboard ftcDashboard;
-
+//    FtcDashboard ftcDashboard;
+//
     Telemetry telemetry;
     CameraStreamSource camera;
 
@@ -33,8 +30,8 @@ public class CSVisionProcessor extends BlocksOpModeCompanion implements VisionPr
 
     final int leftTh = 425;
     final int rightTh = 850;
-    final int upperTh = 200;
-    final int lowerTh = 500;
+    final int upperTh = 250;
+    final int lowerTh = 550;
 
     final int width = 1280;
     final int height = 720;
@@ -66,9 +63,9 @@ public class CSVisionProcessor extends BlocksOpModeCompanion implements VisionPr
 
     @Override
     public void init(int width, int height, CameraCalibration calibration) {
-        ftcDashboard = FtcDashboard.getInstance();
-        telemetry = new MultipleTelemetry(telemetry, ftcDashboard.getTelemetry());
-        ftcDashboard.startCameraStream(camera, 0);
+//        ftcDashboard = FtcDashboard.getInstance();
+//        telemetry = new MultipleTelemetry(telemetry, ftcDashboard.getTelemetry());
+//        ftcDashboard.startCameraStream(camera, 0);
     }
 
     @Override
@@ -100,8 +97,8 @@ public class CSVisionProcessor extends BlocksOpModeCompanion implements VisionPr
 //        kernel = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, kernel2);
 //        Imgproc.morphologyEx(cleanMat, cleanMat, Imgproc.MORPH_CLOSE, kernel);
 
-        telemetry.addData("clean mat size cols", hsvMat.cols());
-        telemetry.addData("clean mat size rows", hsvMat.rows());
+//        telemetry.addData("clean mat size cols", hsvMat.cols());
+//        telemetry.addData("clean mat size rows", hsvMat.rows());
 
         int leftCounter = 0;
         int rightCounter = 0;

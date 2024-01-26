@@ -96,6 +96,7 @@ public class BlueLeftAuto extends LinearOpMode {
         liftMotor = hardwareMap.get(DcMotor.class, "liftMotor");
 
         rightClawOpen = hardwareMap.get(Servo.class, "rightClawOpen");
+        leftClawOpen = hardwareMap.get(Servo.class, "leftClawOpen");
         servoFlip = hardwareMap.get(Servo.class, "servoFlip");
 //        rightClawOpen.setPosition(0.1);
 //        leftClawOpen.setPosition(0.1);
@@ -172,12 +173,12 @@ public class BlueLeftAuto extends LinearOpMode {
                         break;
                     }
 
-
+                    servoFlip.setPosition(0.4);
                     lift.slightlyLift();
                     auto.moveForward(500,0.5);
                     lift.flatStartLift();
-//                    claw.setRightClawOpen();
-//                    claw.closeBothClaws();
+                    claw.setRightClawOpen();
+                    claw.closeBothClaws();
                     lift.slightlyLift();
 
                     state = states.GO_TO_BACKBOARD;
@@ -190,12 +191,14 @@ public class BlueLeftAuto extends LinearOpMode {
                         state = states.STOP;
                         break;
                     }
+
+                    servoFlip.setPosition(0.4);
                     lift.slightlyLift();
                     auto.strafeRight(500,0.5);
                     auto.moveForward(1000,0.5);
                     lift.flatStartLift();
-                    //claw.setRightClawOpen();
-                    //claw.closeBothClaws();
+                    claw.setRightClawOpen();
+                    claw.closeBothClaws();
                     lift.slightlyLift();
                     state = states.GO_TO_BACKBOARD;
                     break;
@@ -207,15 +210,17 @@ public class BlueLeftAuto extends LinearOpMode {
                         state = states.STOP;
                         break;
                     }
+
+                    servoFlip.setPosition(0.4);
                     lift.slightlyLift();
                     auto.strafeRight(1000,0.5);
                     auto.moveForward(500,0.5);
-//                    lift.flatStartLift();
-//                    claw.setRightClawOpen();
-//                    claw.closeBothClaws();
+                    lift.flatStartLift();
+                    claw.setRightClawOpen();
+                    claw.closeBothClaws();
                     lift.slightlyLift();
 
-                    state = states.STOP;
+                    state = states.GO_TO_BACKBOARD;
                     break;
 
 //                case BACK_INTO_WALL:
@@ -237,9 +242,9 @@ public class BlueLeftAuto extends LinearOpMode {
 
 
                     auto.moveBackward(3000,0.5);
-                    auto.moveForward(2000,0.5);
-                    auto.strafeRight(2000,0.5);
+                    auto.strafeLeft(2000,0.5);
                     auto.turnCounterClockwise(1500,0.5);
+                    auto.strafeRight(500,0.5);
 
 
                     state = states.STRAFE_SCAN;
@@ -310,8 +315,8 @@ public class BlueLeftAuto extends LinearOpMode {
                     }
                     auto.turnCounterClockwise(2000,0.5);
                     lift.backboardLift();
-                    //claw.setLeftClawOpen();
-                    //claw.closeBothClaws();
+                    claw.setLeftClawOpen();
+                    claw.closeBothClaws();
                     //raise lift
                     //place claw against backboard
                     //open claw to place pixel

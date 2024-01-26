@@ -17,7 +17,7 @@ public class Lift {
 
         liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        liftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        liftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
     }
 

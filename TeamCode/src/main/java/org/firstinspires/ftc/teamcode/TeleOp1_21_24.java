@@ -77,7 +77,7 @@ public class TeleOp1_21_24 extends LinearOpMode {
         while (opModeIsActive()) {
             double liftPower = 0.7;
             double actuatorPower = 0.7;
-            y = gamepad1.x?-0.75:gamepad1.b?0.75:0; //turning left and right
+            y = gamepad1.x?0.75:gamepad1.b?-0.75:0; //turning left and right
             x = gamepad1.dpad_left?0.75:gamepad1.dpad_right?-0.75:0; //strafe left and right
             r = gamepad1.dpad_up?-0.75:gamepad1.dpad_down?0.75:0; //strafe forward and backward
             String message = "";
@@ -131,9 +131,9 @@ public class TeleOp1_21_24 extends LinearOpMode {
             }
 
             if (gamepad2.dpad_down){
-                servoFlip.setPosition(0.4);
                 rightClawOpen.setPosition(0.4);
                 leftClawOpen.setPosition(1);
+                servoFlip.setPosition(0.4);
                 lift.flatStartLift();
             }
             else if (gamepad2.dpad_up){
@@ -147,7 +147,7 @@ public class TeleOp1_21_24 extends LinearOpMode {
                 rightClawOpen.setPosition(0.4);
                 leftClawOpen.setPosition(1);
                 sleep(250);
-                servoFlip.setPosition(0.7);
+                servoFlip.setPosition(0.2);
             }
 
             if(gamepad2.y){

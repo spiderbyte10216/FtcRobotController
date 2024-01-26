@@ -14,14 +14,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.DriveTrain.MecanumDrive;
 import org.firstinspires.ftc.vision.VisionPortal;
-import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
-import org.opencv.core.Point;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvWebcam;
-
-import java.util.List;
 
 @Autonomous(name="BlueLeftAuto", group= "Robot")
 public class BlueLeftAuto extends LinearOpMode {
@@ -75,17 +71,15 @@ public class BlueLeftAuto extends LinearOpMode {
         leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-
         leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-
         leftFront.setDirection(DcMotorSimple.Direction.FORWARD);
         rightFront.setDirection(DcMotorSimple.Direction.FORWARD);
-        leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightBack.setDirection(DcMotorSimple.Direction.FORWARD);
+        leftBack.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
         //attachments
@@ -173,15 +167,16 @@ public class BlueLeftAuto extends LinearOpMode {
                         break;
                     }
 
-                    servoFlip.setPosition(0.4);
-                    lift.slightlyLift();
-                    auto.moveForward(500,0.5);
-                    lift.flatStartLift();
-                    claw.setRightClawOpen();
-                    claw.closeBothClaws();
-                    lift.slightlyLift();
+                    auto.moveForward(1000, 0.15);
+//                    servoFlip.setPosition(0.4);
+//                    lift.slightlyLift();
+//                    auto.moveForward(500,0.5);
+//                    lift.flatStartLift();
+//                    claw.setRightClawOpen();
+//                    claw.closeBothClaws();
+//                    lift.slightlyLift();
 
-                    state = states.GO_TO_BACKBOARD;
+                    state = states.STOP;
                     break;
 
                 case PLACE_PIXEL_CENTER:
@@ -192,15 +187,17 @@ public class BlueLeftAuto extends LinearOpMode {
                         break;
                     }
 
-                    servoFlip.setPosition(0.4);
-                    lift.slightlyLift();
-                    auto.strafeRight(500,0.5);
-                    auto.moveForward(1000,0.5);
-                    lift.flatStartLift();
-                    claw.setRightClawOpen();
-                    claw.closeBothClaws();
-                    lift.slightlyLift();
-                    state = states.GO_TO_BACKBOARD;
+                    //auto.moveForward(1500, 0.15);
+                    auto.moveBackward(250, 0.15);
+//                    servoFlip.setPosition(0.4);
+//                    lift.slightlyLift();
+//                    auto.strafeRight(500,0.5);
+//                    auto.moveForward(1000,0.5);
+//                    lift.flatStartLift();
+//                    claw.setRightClawOpen();
+//                    claw.closeBothClaws();
+//                    lift.slightlyLift();
+                    state = states.STOP;
                     break;
 
                 case PLACE_PIXEL_RIGHT:
@@ -210,131 +207,131 @@ public class BlueLeftAuto extends LinearOpMode {
                         state = states.STOP;
                         break;
                     }
-
-                    servoFlip.setPosition(0.4);
-                    lift.slightlyLift();
-                    auto.strafeRight(1000,0.5);
-                    auto.moveForward(500,0.5);
-                    lift.flatStartLift();
-                    claw.setRightClawOpen();
-                    claw.closeBothClaws();
-                    lift.slightlyLift();
-
-                    state = states.GO_TO_BACKBOARD;
-                    break;
-
-//                case BACK_INTO_WALL:
-//                    if(!opModeIsActive()) {
-//                        state = states.STOP;
-//                        break;
-//                    }
-//                    auto.moveBackward(1000,0.5);
-//                    state = states.GO_TO_BACKBOARD;
-//                    break;
-
-                case GO_TO_BACKBOARD:
-                    telemetry.addData("State: ", state);
-                    telemetry.update();
-                    if(!opModeIsActive()) {
-                        state = states.STOP;
-                        break;
-                    }
-
-
-                    auto.moveBackward(3000,0.5);
-                    auto.strafeLeft(2000,0.5);
-                    auto.turnCounterClockwise(1500,0.5);
-                    auto.strafeRight(500,0.5);
-
-
-                    state = states.STRAFE_SCAN;
-                    break;
-//                case CHECK_DISTANCE:
-//                    if(!opModeIsActive()) {
-//                        state = states.STOP;
-//                        break;
-//                    }
-//                    //check distance from backdrop
-//                    //if too close move backwards
-//                    //if too far move forwards
-//                    state = states.STRAFE_SCAN;
-//                    break;
-                case STRAFE_SCAN:
-                    telemetry.addData("State: ", state);
-                    telemetry.update();
-                    if(!opModeIsActive()) {
-                        state = states.STOP;
-                        break;
-                    }
-
-                    visionPortal.setProcessorEnabled(aprilTagProcessor, true);
-                    visionPortal.setProcessorEnabled(visionProcessor, false);
-
-                    int aprilTagId;
-                    if (startingPosition == CSVisionProcessor.StartingPosition.LEFT) {
-                        aprilTagId = 0;
-                    } else if (startingPosition == CSVisionProcessor.StartingPosition.CENTER) {
-                        aprilTagId = 1;
-                    } else {
-                        aprilTagId = 2;
-                    }
-                    List<AprilTagDetection> currentDetections = aprilTagProcessor.getDetections();
-                    telemetry.addData("# AprilTags Detected", currentDetections.size());
-
-                    Point position = null;
-                    // Step through the list of detections and display info for each one.
-                    for (AprilTagDetection detection : currentDetections) {
-                        if (detection.id == aprilTagId) {
-                            position = detection.center;
-                            break;
-                        }
-                    }
-                    if (position != null) {
-                        if (position.x > 640) {
-                            auto.strafeRight(500, 0.5);
-                        } else if (position.x < 640) {
-                            auto.strafeLeft(500,0.5);
-                        }
-                    }
-
-                    state = states.PLACE_PIXEL_ON_BACKDROP;
-
+                    auto.moveForward(1000, 0.15);
+//                    servoFlip.setPosition(0.4);
+//                    lift.slightlyLift();
+//                    auto.strafeRight(1000,0.5);
 //                    auto.moveForward(500,0.5);
-//                    moveToBackboard -= 500;
-//                    if (moveToBackboard < 0) {
-//                        state = states.PLACE_PIXEL_ON_BACKDROP;
-//                    }
+//                    lift.flatStartLift();
+//                    claw.setRightClawOpen();
+//                    claw.closeBothClaws();
+//                    lift.slightlyLift();
 
-                    break;
-                case PLACE_PIXEL_ON_BACKDROP:
-                    telemetry.addData("State: ", state);
-                    telemetry.update();
-                    if(!opModeIsActive()) {
-                        state = states.STOP;
-                        break;
-                    }
-                    auto.turnCounterClockwise(2000,0.5);
-                    lift.backboardLift();
-                    claw.setLeftClawOpen();
-                    claw.closeBothClaws();
-                    //raise lift
-                    //place claw against backboard
-                    //open claw to place pixel
-                    state = states.PARK_TO_THE_RIGHT;
-                    break;
-                case PARK_TO_THE_RIGHT:
-                    telemetry.addData("State: ", state);
-                    telemetry.update();
-                    if(!opModeIsActive()) {
-                        state = states.STOP;
-                        break;
-                    }
-                    lift.slightlyLift();
-                    auto.moveBackward(500,0.5);
-                    auto.strafeRight(2000,0.5);
-                    auto.moveForward(1500,0.5);
                     state = states.STOP;
                     break;
+//
+////                case BACK_INTO_WALL:
+////                    if(!opModeIsActive()) {
+////                        state = states.STOP;
+////                        break;
+////                    }
+////                    auto.moveBackward(1000,0.5);
+////                    state = states.GO_TO_BACKBOARD;
+////                    break;
+//
+//                case GO_TO_BACKBOARD:
+//                    telemetry.addData("State: ", state);
+//                    telemetry.update();
+//                    if(!opModeIsActive()) {
+//                        state = states.STOP;
+//                        break;
+//                    }
+//
+//
+//                    auto.moveBackward(3000,0.5);
+//                    auto.strafeLeft(2000,0.5);
+//                    auto.turnCounterClockwise(1500,0.5);
+//                    auto.strafeRight(500,0.5);
+//
+//
+//                    state = states.STRAFE_SCAN;
+//                    break;
+////                case CHECK_DISTANCE:
+////                    if(!opModeIsActive()) {
+////                        state = states.STOP;
+////                        break;
+////                    }
+////                    //check distance from backdrop
+////                    //if too close move backwards
+////                    //if too far move forwards
+////                    state = states.STRAFE_SCAN;
+////                    break;
+//                case STRAFE_SCAN:
+//                    telemetry.addData("State: ", state);
+//                    telemetry.update();
+//                    if(!opModeIsActive()) {
+//                        state = states.STOP;
+//                        break;
+//                    }
+//
+//                    visionPortal.setProcessorEnabled(aprilTagProcessor, true);
+//                    visionPortal.setProcessorEnabled(visionProcessor, false);
+//
+//                    int aprilTagId;
+//                    if (startingPosition == CSVisionProcessor.StartingPosition.LEFT) {
+//                        aprilTagId = 0;
+//                    } else if (startingPosition == CSVisionProcessor.StartingPosition.CENTER) {
+//                        aprilTagId = 1;
+//                    } else {
+//                        aprilTagId = 2;
+//                    }
+//                    List<AprilTagDetection> currentDetections = aprilTagProcessor.getDetections();
+//                    telemetry.addData("# AprilTags Detected", currentDetections.size());
+//
+//                    Point position = null;
+//                    // Step through the list of detections and display info for each one.
+//                    for (AprilTagDetection detection : currentDetections) {
+//                        if (detection.id == aprilTagId) {
+//                            position = detection.center;
+//                            break;
+//                        }
+//                    }
+//                    if (position != null) {
+//                        if (position.x > 640) {
+//                            auto.strafeRight(500, 0.5);
+//                        } else if (position.x < 640) {
+//                            auto.strafeLeft(500,0.5);
+//                        }
+//                    }
+//
+//                    state = states.PLACE_PIXEL_ON_BACKDROP;
+//
+////                    auto.moveForward(500,0.5);
+////                    moveToBackboard -= 500;
+////                    if (moveToBackboard < 0) {
+////                        state = states.PLACE_PIXEL_ON_BACKDROP;
+////                    }
+//
+//                    break;
+//                case PLACE_PIXEL_ON_BACKDROP:
+//                    telemetry.addData("State: ", state);
+//                    telemetry.update();
+//                    if(!opModeIsActive()) {
+//                        state = states.STOP;
+//                        break;
+//                    }
+//                    auto.turnCounterClockwise(2000,0.5);
+//                    lift.backboardLift();
+//                    claw.setLeftClawOpen();
+//                    claw.closeBothClaws();
+//                    //raise lift
+//                    //place claw against backboard
+//                    //open claw to place pixel
+//                    state = states.PARK_TO_THE_RIGHT;
+//                    break;
+//                case PARK_TO_THE_RIGHT:
+//                    telemetry.addData("State: ", state);
+//                    telemetry.update();
+//                    if(!opModeIsActive()) {
+//                        state = states.STOP;
+//                        break;
+//                    }
+//                    lift.slightlyLift();
+//                    auto.moveBackward(500,0.5);
+//                    auto.strafeRight(2000,0.5);
+//                    auto.moveForward(1500,0.5);
+//                    state = states.STOP;
+//                    break;
                 case STOP:
 
                     break;

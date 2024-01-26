@@ -36,14 +36,16 @@ public class TestEncodersForward extends LinearOpMode{
 
         leftFront.setDirection(DcMotorSimple.Direction.FORWARD);
         rightFront.setDirection(DcMotorSimple.Direction.FORWARD);
-        leftBack.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightBack.setDirection(DcMotorSimple.Direction.FORWARD);
 
         waitForStart();
 
         MecanumDrive auto = new MecanumDrive(leftFront, rightFront, leftBack, rightBack, runtime, telemetry, this);
 
         auto.moveForward(3000, 0.5);
+        auto.strafeLeft(3000,0.5);
+        auto.strafeRight(3000,0.5);
 
 
 

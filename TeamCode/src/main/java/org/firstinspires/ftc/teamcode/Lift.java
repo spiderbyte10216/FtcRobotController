@@ -32,7 +32,7 @@ public class Lift {
     public void backboardLift(){
         liftMotor.setTargetPosition(1500);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        liftMotor.setPower(0.35);
+        liftMotor.setPower(0.2);
 
     }
 

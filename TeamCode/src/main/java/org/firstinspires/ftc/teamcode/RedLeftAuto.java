@@ -19,8 +19,8 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-@Autonomous(name="BlueLeftAuto", group= "Robot")
-public class BlueLeftAuto extends LinearOpMode {
+@Autonomous(name="RedLeftAuto", group= "Robot")
+public class RedLeftAuto extends LinearOpMode {
 
     /* Declare OpMode members. */
     private DcMotor leftBack = null;
@@ -102,7 +102,7 @@ public class BlueLeftAuto extends LinearOpMode {
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         OpenCvWebcam camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-        visionProcessor = new CSVisionProcessor(telemetry, camera, 106, 124, 0, 134, 255, 191);
+        visionProcessor = new CSVisionProcessor(telemetry, camera, 153, 50, 20, 179, 255, 255);
         aprilTagProcessor =  new AprilTagProcessor.Builder()
                 .setDrawAxes(true)
                 .setDrawCubeProjection(true)
@@ -165,10 +165,9 @@ public class BlueLeftAuto extends LinearOpMode {
                     }
 
                     rightClawOpen.setPosition(0.8);
-                    leftClawOpen.setPosition(0.5);
-                    auto.strafeLeft(550, 0.15);
+                    auto.strafeLeft(475, 0.15);
                     auto.resetWheels();
-                    auto.moveForward(1100,0.15);
+                    auto.moveForward(1000,0.15);
                     auto.resetWheels();
                     auto.moveBackward(250,0.15);
                     auto.resetWheels();
@@ -182,7 +181,6 @@ public class BlueLeftAuto extends LinearOpMode {
                     auto.moveBackward(500,0.15);
                     auto.resetWheels();
                     auto.strafeLeft(500,0.15);
-                    servoFlip.setPosition(0.4);
                     leftClawOpen.setPosition(1);
 
                     //auto.moveForward(1000, 0.15);
@@ -207,7 +205,7 @@ public class BlueLeftAuto extends LinearOpMode {
 
                     rightClawOpen.setPosition(0.8);
                     leftClawOpen.setPosition(0.5);
-                    auto.moveForward(1525,0.15);
+                    auto.moveForward(1500,0.15);
                     auto.resetWheels();
                     auto.moveBackward(250,0.15);
                     auto.resetWheels();
@@ -242,7 +240,6 @@ public class BlueLeftAuto extends LinearOpMode {
                     }
 
                     rightClawOpen.setPosition(0.8);
-                    leftClawOpen.setPosition(0.5);
                     auto.moveForward(1200, 0.15);
                     auto.resetWheels();
                     auto.strafeRight(450, 0.15);

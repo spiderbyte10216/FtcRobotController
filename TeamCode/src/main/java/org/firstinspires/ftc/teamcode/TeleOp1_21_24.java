@@ -120,19 +120,19 @@ public class TeleOp1_21_24 extends LinearOpMode {
             //telemetry.update();
 
             if (gamepad2.left_bumper && gamepad2.right_bumper){
-                leftClawOpen.setPosition(1);
-                rightClawOpen.setPosition(0.4);
+                leftClawOpen.setPosition(0.5);
+                rightClawOpen.setPosition(0.8);
             }
             else if (gamepad2.left_bumper) {
-                leftClawOpen.setPosition(0.7);
+                leftClawOpen.setPosition(1);
             }
             else if (gamepad2.right_bumper) {
-                rightClawOpen.setPosition(0.7);
+                rightClawOpen.setPosition(0.2);
             }
 
             if (gamepad2.dpad_down){
-                rightClawOpen.setPosition(0.4);
-                leftClawOpen.setPosition(1);
+                rightClawOpen.setPosition(0.8);
+                leftClawOpen.setPosition(0.5);
                 servoFlip.setPosition(0.4);
                 lift.flatStartLift();
             }
@@ -144,8 +144,8 @@ public class TeleOp1_21_24 extends LinearOpMode {
             }
 
             if(gamepad2.x){
-                rightClawOpen.setPosition(0.4);
-                leftClawOpen.setPosition(1);
+                rightClawOpen.setPosition(0.8);
+                leftClawOpen.setPosition(0.5);
                 sleep(250);
                 servoFlip.setPosition(0.2);
             }
@@ -183,7 +183,7 @@ public class TeleOp1_21_24 extends LinearOpMode {
                 actuator.setPower(0);
             }
             else if (gamepad1.right_bumper){
-                actuatorFlip.setPosition(0.9);
+                actuatorFlip.setPosition(0.3);
             }
 
         }

@@ -19,8 +19,8 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-@Autonomous(name="BlueLeftAuto", group= "Robot")
-public class BlueLeftAuto extends LinearOpMode {
+@Autonomous(name="BlueRightAuto", group= "Robot")
+public class BlueRightAuto extends LinearOpMode {
 
     /* Declare OpMode members. */
     private DcMotor leftBack = null;
@@ -165,26 +165,19 @@ public class BlueLeftAuto extends LinearOpMode {
                     }
 
                     rightClawOpen.setPosition(0.8);
-                    leftClawOpen.setPosition(0.5);
-                    auto.strafeLeft(550, 0.15);
+                    auto.moveForward(1230, 0.15);
                     auto.resetWheels();
-                    auto.moveForward(1100,0.15);
+                    auto.strafeLeft(475, 0.15);
                     auto.resetWheels();
-                    auto.moveBackward(250,0.15);
+                    auto.moveBackward(100,0.15);
                     auto.resetWheels();
                     servoFlip.setPosition(0.4);
-                    sleep(1000);
+                    sleep(1500);
                     rightClawOpen.setPosition(0.2);
-                    auto.moveBackward(500, 0.15);
+                    sleep(1000);
+                    auto.moveForward(100, 0.15);
                     auto.resetWheels();
-                    auto.strafeLeft(750,0.15);
-                    auto.resetWheels();
-                    auto.moveBackward(500,0.15);
-                    auto.resetWheels();
-                    auto.strafeLeft(500,0.15);
-                    servoFlip.setPosition(0.4);
-                    leftClawOpen.setPosition(1);
-
+                    auto.strafeRight(700, 0.15);
                     //auto.moveForward(1000, 0.15);
 //                    servoFlip.setPosition(0.4);
 //                    lift.slightlyLift();
@@ -206,22 +199,14 @@ public class BlueLeftAuto extends LinearOpMode {
                     }
 
                     rightClawOpen.setPosition(0.8);
-                    leftClawOpen.setPosition(0.5);
-                    auto.moveForward(1525,0.15);
+                    auto.moveForward(1500,0.15);
                     auto.resetWheels();
                     auto.moveBackward(250,0.15);
                     auto.resetWheels();
                     servoFlip.setPosition(0.4);
                     sleep(1000);
                     rightClawOpen.setPosition(0.2);
-                    auto.moveBackward(1000, 0.15);
-                    auto.resetWheels();
-                    auto.strafeLeft(1500,0.15);
-                    leftClawOpen.setPosition(1);
-
-
-
-
+                    auto.moveBackward(500, 0.15);
 //                    servoFlip.setPosition(0.4);
 //                    lift.slightlyLift();
 //                    auto.strafeRight(500,0.5);
@@ -242,32 +227,16 @@ public class BlueLeftAuto extends LinearOpMode {
                     }
 
                     rightClawOpen.setPosition(0.8);
-                    leftClawOpen.setPosition(0.5);
-                    auto.moveForward(1200, 0.15);
+                    auto.strafeRight(420, 0.15);
                     auto.resetWheels();
-                    auto.strafeRight(450, 0.15);
+                    auto.moveForward(1000,0.15);
                     auto.resetWheels();
-                    auto.moveBackward(100,0.15);
+                    auto.moveBackward(250,0.15);
                     auto.resetWheels();
                     servoFlip.setPosition(0.4);
-                    sleep(1500);
+                    sleep(1000);
                     rightClawOpen.setPosition(0.2);
-                    sleep(1000);
-                    servoFlip.setPosition(0.8);
-                    sleep(1000);
-                    auto.moveForward(100, 0.15);
-                    auto.resetWheels();
-                    auto.strafeLeft(1000, 0.15);
-                    auto.resetWheels();
-                    auto.moveBackward(500,0.15);
-                    auto.resetWheels();
-                    auto.strafeLeft(750,0.15);
-                    auto.resetWheels();
-                    auto.moveBackward(500,0.15);
-                    auto.resetWheels();
-                    auto.strafeLeft(500,0.15);
-                    servoFlip.setPosition(0.4);
-                    leftClawOpen.setPosition(1);
+                    auto.moveBackward(500, 0.15);
 
                     //auto.moveForward(1000, 0.15);
 //                    servoFlip.setPosition(0.4);

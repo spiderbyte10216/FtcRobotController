@@ -26,7 +26,13 @@ public class CSVisionProcessor extends BlocksOpModeCompanion implements VisionPr
     CameraStreamSource camera;
 
 
+    int ilowH;
+    int ilowS;
+    int ilowV;
 
+    int ihighH;
+    int ihighS;
+    int ihighV;
 
     final int leftTh = 425;
     final int rightTh = 850;
@@ -54,9 +60,16 @@ public class CSVisionProcessor extends BlocksOpModeCompanion implements VisionPr
         return 0;
     }
 
-    public CSVisionProcessor(Telemetry telemetry, CameraStreamSource camera) {
+
+    public CSVisionProcessor(Telemetry telemetry, CameraStreamSource camera, int ilowH, int ilowS, int ilowV, int ihighH, int ihighS, int ihighV) {
         this.telemetry = telemetry;
         this.camera = camera;
+        this.ilowH = ilowH;
+        this.ilowS = ilowS;
+        this.ilowV = ilowV;
+        this.ihighH = ihighH;
+        this.ihighS = ihighS;
+        this.ihighV = ihighV;
 
     }
 
@@ -76,13 +89,7 @@ public class CSVisionProcessor extends BlocksOpModeCompanion implements VisionPr
         Mat hsvMat = new Mat();
         Imgproc.cvtColor(frame, hsvMat, Imgproc.COLOR_RGB2HSV);
 
-        double ilowH = 106;
-        double ilowS = 124;
-        double ilowV = 0;
 
-        double ihighH = 134;
-        double ihighS = 255;
-        double ihighV = 191;
         Mat threshMat = new Mat();
         Scalar lower_hsv = new Scalar(ilowH, ilowS, ilowV);
         Scalar higher_hsv = new Scalar(ihighH, ihighS, ihighV);

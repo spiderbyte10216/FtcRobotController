@@ -5,6 +5,7 @@ import static java.lang.Math.max;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -106,12 +107,12 @@ public class MecanumDrive extends driveTrain {
         double x;
         double r;
         y = 0;
-        x = power;
-        r = 0;
-        p1 = -x - y - r;
+        x = 0;
+        r = -power;
+        p1 = x + y + r;
         p2 = x - y - r;
-        p3 = -x + y - r;
-        p4 = x + y - r;
+        p3 = x + y - r;
+        p4 = x - y + r;
 
 
         maxval = max(abs(p1), abs(p2));
@@ -140,6 +141,7 @@ public class MecanumDrive extends driveTrain {
             telemetry.addData("p4", p4);
             telemetry.update();
         }
+
         leftFront.setPower(0);
         rightFront.setPower(0);
         leftBack.setPower(0);
@@ -196,7 +198,7 @@ public class MecanumDrive extends driveTrain {
     }
 
     @Override
-    public void strafeLeft(int encoderTicks, double power) {
+    public void strafeRight(int encoderTicks, double power) {
         double p1, p2, p3, p4;
         double maxval;
         double y;
@@ -243,7 +245,7 @@ public class MecanumDrive extends driveTrain {
     }
 
     @Override
-    public void strafeRight(int encoderTicks, double power) {
+    public void strafeLeft(int encoderTicks, double power) {
         double p1, p2, p3, p4;
         double maxval;
         double y;
@@ -288,5 +290,22 @@ public class MecanumDrive extends driveTrain {
         leftBack.setPower(0);
         rightBack.setPower(0);
 
+    }
+
+    public void resetWheels() {
+        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        leftFront.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightFront.setDirection(DcMotorSimple.Direction.FORWARD);
+        leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightBack.setDirection(DcMotorSimple.Direction.FORWARD);
     }
 }

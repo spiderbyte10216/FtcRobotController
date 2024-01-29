@@ -174,10 +174,7 @@ public class BlueRightAuto extends LinearOpMode {
                     servoFlip.setPosition(0.4);
                     sleep(1500);
                     rightClawOpen.setPosition(0.2);
-                    sleep(1000);
-                    auto.moveForward(100, 0.15);
-                    auto.resetWheels();
-                    auto.strafeRight(700, 0.15);
+
                     //auto.moveForward(1000, 0.15);
 //                    servoFlip.setPosition(0.4);
 //                    lift.slightlyLift();
@@ -206,7 +203,6 @@ public class BlueRightAuto extends LinearOpMode {
                     servoFlip.setPosition(0.4);
                     sleep(1000);
                     rightClawOpen.setPosition(0.2);
-                    auto.moveBackward(500, 0.15);
 //                    servoFlip.setPosition(0.4);
 //                    lift.slightlyLift();
 //                    auto.strafeRight(500,0.5);
@@ -236,7 +232,7 @@ public class BlueRightAuto extends LinearOpMode {
                     servoFlip.setPosition(0.4);
                     sleep(1000);
                     rightClawOpen.setPosition(0.2);
-                    auto.moveBackward(500, 0.15);
+
 
                     //auto.moveForward(1000, 0.15);
 //                    servoFlip.setPosition(0.4);

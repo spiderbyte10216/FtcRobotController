@@ -154,7 +154,7 @@ public class TeleOp1_21_24 extends LinearOpMode {
                 servoFlip.setPosition(0.4);
             }
 
-            if (gamepad2.a) {
+            if (gamepad1.a) {
                 drone.setPosition(0.4);
             }
             /*if ((gamepad2.left_stick_y>0.1)) {

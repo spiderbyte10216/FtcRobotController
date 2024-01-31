@@ -21,9 +21,9 @@ public class MecanumDrive extends driveTrain {
         double y;
         double x;
         double r;
-        y = power;
+        y = 0;
         x = 0;
-        r = 0;
+        r = power;
         p1 = x + y + r;
         p2 = x - y - r;
         p3 = x + y - r;
@@ -63,9 +63,9 @@ public class MecanumDrive extends driveTrain {
         double y;
         double x;
         double r;
-        y = -power;
+        y = 0;
         x = 0;
-        r = 0;
+        r = -power;
         p1 = x + y + r;
         p2 = x - y - r;
         p3 = x + y - r;

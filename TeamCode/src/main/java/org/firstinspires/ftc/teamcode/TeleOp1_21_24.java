@@ -23,6 +23,7 @@ public class TeleOp1_21_24 extends LinearOpMode {
     private DcMotor rightBack;
     private DcMotor actuator;
     private ElapsedTime runtime = new ElapsedTime();
+    private ElapsedTime servoTimer = new ElapsedTime();
     private Lift lift;
     private Servo drone = null;
 
@@ -61,6 +62,8 @@ public class TeleOp1_21_24 extends LinearOpMode {
         leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
         rightBack.setDirection(DcMotorSimple.Direction.FORWARD);
 
+        boolean servoDown = false;
+
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -77,9 +80,9 @@ public class TeleOp1_21_24 extends LinearOpMode {
         while (opModeIsActive()) {
             double liftPower = 0.7;
             double actuatorPower = 0.7;
-            y = gamepad1.x?0.75:gamepad1.b?-0.75:0; //turning left and right
-            x = gamepad1.dpad_left?0.75:gamepad1.dpad_right?-0.75:0; //strafe left and right
-            r = gamepad1.dpad_up?-0.75:gamepad1.dpad_down?0.75:0; //strafe forward and backward
+            y = gamepad1.left_stick_y;
+            x = gamepad1.left_stick_x;
+            r = gamepad1.right_stick_y;
             String message = "";
             message += x;
             message += ",";
@@ -119,6 +122,7 @@ public class TeleOp1_21_24 extends LinearOpMode {
             //telemetry.addData("Flat val", servoFlipFlat);
             //telemetry.update();
 
+
             if (gamepad2.left_bumper && gamepad2.right_bumper){
                 leftClawOpen.setPosition(0.5);
                 rightClawOpen.setPosition(0.8);
@@ -139,6 +143,10 @@ public class TeleOp1_21_24 extends LinearOpMode {
             else if (gamepad2.dpad_up){
                 lift.backboardLift();
             }
+            else if(gamepad2.dpad_right){
+                lift.slightlyLift();
+                servoFlip.setPosition(0.8);
+            }
             else if (gamepad2.dpad_left){
                 lift.slightlyLift();
             }
@@ -146,40 +154,44 @@ public class TeleOp1_21_24 extends LinearOpMode {
             if(gamepad2.x){
                 rightClawOpen.setPosition(0.8);
                 leftClawOpen.setPosition(0.5);
-                sleep(250);
-                servoFlip.setPosition(0.2);
+                servoTimer.reset();
+                servoDown = true;
+            }
+            if(servoDown == true && servoTimer.milliseconds() > 250)
+            {
+                servoFlip.setPosition(0.8);
+                servoDown = false;
             }
 
             if(gamepad2.y){
                 servoFlip.setPosition(0.4);
+                servoDown = false;
             }
 
             if (gamepad1.a) {
                 drone.setPosition(0.4);
             }
-            /*if ((gamepad2.left_stick_y>0.1)) {
+
+
+            if ((gamepad2.left_stick_y>0.1)) {
                 liftMotor.setDirection(DcMotor.Direction.REVERSE);
                 liftMotor.setPower(liftPower);
-                sleep(1);
                 liftMotor.setPower(0);
 
             }
             if ((gamepad2.left_stick_y<-0.1)) {
                 liftMotor.setDirection(DcMotor.Direction.FORWARD);
                 liftMotor.setPower(liftPower);
-                sleep(1);
                 liftMotor.setPower(0);
-            }*/
+            }
             if (gamepad1.left_bumper && gamepad1.right_bumper){
                 actuator.setDirection(DcMotor.Direction.REVERSE);
                 actuator.setPower(liftPower);
-                sleep(1000);
                 actuator.setPower(0);
             }
             else if (gamepad1.left_bumper){
                 actuator.setDirection(DcMotor.Direction.FORWARD);
                 actuator.setPower(actuatorPower);
-                sleep(1000);
                 actuator.setPower(0);
             }
             else if (gamepad1.right_bumper){

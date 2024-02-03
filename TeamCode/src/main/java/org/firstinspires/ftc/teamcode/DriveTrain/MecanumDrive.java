@@ -15,15 +15,15 @@ public class MecanumDrive extends driveTrain {
         super(leftFront, rightFront, leftBack, rightBack, runtime, telemetry, opMode);
     }
 
-    public void turnCounterClockwise(int milliseconds, double power) {
+    public void turnCounterClockwise(int encoderTicks, double power) {
         double p1, p2, p3, p4;
         double maxval;
         double y;
         double x;
         double r;
-        y = 0;
+        y = power;
         x = 0;
-        r = power;
+        r = 0;
         p1 = x + y + r;
         p2 = x - y - r;
         p3 = x + y - r;
@@ -47,8 +47,13 @@ public class MecanumDrive extends driveTrain {
         leftBack.setPower(p3);
         rightBack.setPower(p4);
         double startTime = runtime.milliseconds();
-        while ((runtime.milliseconds() - startTime) < milliseconds && opMode.opModeIsActive()) {
-
+        while (Math.abs(leftFront.getCurrentPosition()) < encoderTicks && opMode.opModeIsActive()) {
+            telemetry.addData("encoder ticks", leftFront.getCurrentPosition());
+            telemetry.addData("p1", p1);
+            telemetry.addData("p2", p2);
+            telemetry.addData("p3", p3);
+            telemetry.addData("p4", p4);
+            telemetry.update();
         }
         leftFront.setPower(0);
         rightFront.setPower(0);
@@ -57,7 +62,7 @@ public class MecanumDrive extends driveTrain {
     }
 
     @Override
-    public void turnClockwise(int milliseconds, double power) {
+    public void turnClockwise(int encoderTicks, double power) {
         double p1, p2, p3, p4;
         double maxval;
         double y;
@@ -89,8 +94,13 @@ public class MecanumDrive extends driveTrain {
         leftBack.setPower(p3);
         rightBack.setPower(p4);
         double startTime = runtime.milliseconds();
-        while ((runtime.milliseconds() - startTime) < milliseconds && opMode.opModeIsActive()) {
-
+        while (Math.abs(leftFront.getCurrentPosition()) < encoderTicks && opMode.opModeIsActive()) {
+            telemetry.addData("encoder ticks", leftFront.getCurrentPosition());
+            telemetry.addData("p1", p1);
+            telemetry.addData("p2", p2);
+            telemetry.addData("p3", p3);
+            telemetry.addData("p4", p4);
+            telemetry.update();
         }
         leftFront.setPower(0);
         rightFront.setPower(0);

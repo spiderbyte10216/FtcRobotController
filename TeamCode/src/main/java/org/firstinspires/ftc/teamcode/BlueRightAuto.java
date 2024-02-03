@@ -165,11 +165,12 @@ public class BlueRightAuto extends LinearOpMode {
                     }
 
                     rightClawOpen.setPosition(0.8);
-                    auto.moveForward(1230, 0.2);
+                    leftClawOpen.setPosition(0.5);
+                    auto.moveForward(1230, 0.25);
                     auto.resetWheels();
-                    auto.strafeLeft(475, 0.2);
+                    auto.strafeLeft(475, 0.25);
                     auto.resetWheels();
-                    auto.moveBackward(100,0.2);
+                    auto.moveBackward(100,0.25);
                     auto.resetWheels();
                     servoFlip.setPosition(0.4);
                     sleep(1500);
@@ -177,23 +178,11 @@ public class BlueRightAuto extends LinearOpMode {
                     servoFlip.setPosition(0.8);
                     auto.resetWheels();
                     //parking pseudo code
-                    auto.strafeRight(300,0.2);
-                    auto.moveBackward(1000,0.2);
-                    auto.resetWheels();
-                    auto.strafeRight(750,0.2);
-                    auto.resetWheels();
-                    auto.moveForward(2000,0.2);
-                    auto.resetWheels();
-                    auto.strafeLeft(3000,0.4);
-                    auto.resetWheels();
-                    auto.moveBackward(2000,0.2);
-                    auto.resetWheels();
-                    auto.strafeLeft(500,0.2);
+                    auto.strafeLeft(2000,0.25);
                     auto.resetWheels();
                     servoFlip.setPosition(0.4);
-                    leftClawOpen.setPosition(0.2);
+                    leftClawOpen.setPosition(1);
                     sleep(1000);
-                    servoFlip.setPosition(0.8);
 
 
                     //auto.moveForward(1000, 0.15);
@@ -216,32 +205,28 @@ public class BlueRightAuto extends LinearOpMode {
                         break;
                     }
 
+                    leftClawOpen.setPosition(0.5);
                     rightClawOpen.setPosition(0.8);
-                    auto.moveForward(1500,0.2);
+                    auto.moveForward(1550,0.25);
                     auto.resetWheels();
-                    auto.moveBackward(250,0.2);
+                    auto.moveBackward(200,0.25);
                     auto.resetWheels();
                     servoFlip.setPosition(0.4);
                     sleep(1000);
                     rightClawOpen.setPosition(0.2);
-                    servoFlip.setPosition(0.8);
+                    rightClawOpen.setPosition(0.8);
+                    servoFlip.setPosition(1);
                     //parking pseudo code
-                    auto.moveBackward(1250,0.2);
+                    auto.moveBackward(1000,0.25);
                     auto.resetWheels();
-                    auto.strafeRight(750,0.2);
+                    //lift.slightlyLift();
+                    //auto.turnCounterClockwise(500, 0.10);
+                    liftMotor.setTargetPosition(75);
+                    liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    liftMotor.setPower(1);
                     auto.resetWheels();
-                    auto.moveForward(2000,0.2);
-                    auto.resetWheels();
-                    auto.strafeLeft(3000,0.4);
-                    auto.resetWheels();
-                    auto.moveBackward(2000,0.2);
-                    auto.resetWheels();
-                    auto.strafeLeft(750,0.2);
-                    auto.resetWheels();
-                    servoFlip.setPosition(0.2);
-                    leftClawOpen.setPosition(0.2);
-                    sleep(1000);
-                    servoFlip.setPosition(0.8);
+                    auto.strafeLeft(2000,0.25);
+
 
                     state = states.STOP;
                     break;
@@ -255,33 +240,26 @@ public class BlueRightAuto extends LinearOpMode {
                     }
 
                     rightClawOpen.setPosition(0.8);
-                    auto.strafeRight(420, 0.2);
+                    leftClawOpen.setPosition(0.5);
+                    auto.strafeRight(420, 0.25);
                     auto.resetWheels();
-                    auto.moveForward(1000,0.2);
+                    auto.moveForward(1200,0.25);
                     auto.resetWheels();
-                    auto.moveBackward(250,0.2);
+                    auto.moveBackward(250,0.25);
                     auto.resetWheels();
                     servoFlip.setPosition(0.4);
                     sleep(1000);
                     rightClawOpen.setPosition(0.2);
 
                     // parking pseudo code
-                    auto.moveBackward(1000,0.2);
+                    auto.moveBackward(1000,0.25);
                     auto.resetWheels();
-                    auto.strafeRight(500,0.2);
-                    auto.resetWheels();
-                    auto.moveForward(2000,0.2);
-                    auto.resetWheels();
-                    auto.strafeLeft(3250,0.4);
-                    auto.resetWheels();
-                    auto.moveBackward(2000,0.2);
-                    auto.resetWheels();
-                    auto.strafeLeft(500,0.2);
-                    auto.resetWheels();
+                    auto.strafeLeft(2000,0.25);
                     servoFlip.setPosition(0.2);
                     leftClawOpen.setPosition(0.2);
                     sleep(1000);
-                    servoFlip.setPosition(0.8);
+
+
 
 
                     //auto.moveForward(1000, 0.15);

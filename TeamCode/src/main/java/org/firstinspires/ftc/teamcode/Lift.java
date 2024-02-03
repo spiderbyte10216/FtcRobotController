@@ -24,7 +24,7 @@ public class Lift {
     public void slightlyLift(){
         liftMotor.setTargetPosition(150);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        liftMotor.setPower(0.35);
+        liftMotor.setPower(0.45);
 
 
     }
@@ -39,6 +39,6 @@ public class Lift {
     public void flatStartLift(){
         liftMotor.setTargetPosition(0);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        liftMotor.setPower(0.35);
+        liftMotor.setPower(0.30);
     }
 }

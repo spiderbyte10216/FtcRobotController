@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+//teleop works 2/2/24
 @TeleOp(name = "TeleOp1_21_24", group = "Mecanum")
 public class TeleOp1_21_24 extends LinearOpMode {
     private Servo leftClawOpen = null;
@@ -80,9 +81,9 @@ public class TeleOp1_21_24 extends LinearOpMode {
         while (opModeIsActive()) {
             double liftPower = 0.7;
             double actuatorPower = 0.7;
-            y = gamepad1.left_stick_y;
-            x = gamepad1.left_stick_x;
-            r = gamepad1.right_stick_y;
+            y = -gamepad1.right_stick_x;
+            x = -gamepad1.left_stick_x;
+            r = gamepad1.left_stick_y;
             String message = "";
             message += x;
             message += ",";
@@ -135,8 +136,6 @@ public class TeleOp1_21_24 extends LinearOpMode {
             }
 
             if (gamepad2.dpad_down){
-                rightClawOpen.setPosition(0.8);
-                leftClawOpen.setPosition(0.5);
                 servoFlip.setPosition(0.4);
                 lift.flatStartLift();
             }
@@ -145,7 +144,8 @@ public class TeleOp1_21_24 extends LinearOpMode {
             }
             else if(gamepad2.dpad_right){
                 lift.slightlyLift();
-                servoFlip.setPosition(0.8);
+                servoFlip.setPosition(0.6);
+
             }
             else if (gamepad2.dpad_left){
                 lift.slightlyLift();
@@ -159,16 +159,16 @@ public class TeleOp1_21_24 extends LinearOpMode {
             }
             if(servoDown == true && servoTimer.milliseconds() > 250)
             {
-                servoFlip.setPosition(0.8);
+                servoFlip.setPosition(0.2);
                 servoDown = false;
             }
 
             if(gamepad2.y){
-                servoFlip.setPosition(0.4);
+                servoFlip.setPosition(0.5);
                 servoDown = false;
             }
 
-            if (gamepad1.a) {
+            if (gamepad2.a) {
                 drone.setPosition(0.4);
             }
 

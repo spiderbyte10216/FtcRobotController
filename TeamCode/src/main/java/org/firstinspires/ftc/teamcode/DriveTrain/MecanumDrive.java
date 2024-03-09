@@ -143,7 +143,38 @@ public class MecanumDrive extends driveTrain {
         leftBack.setPower(p3);
         rightBack.setPower(p4);
         double startTime = runtime.milliseconds();
-        while (Math.abs(leftFront.getCurrentPosition()) < encoderTicks && opMode.opModeIsActive()) {
+        double startPosition = leftFront.getCurrentPosition();
+        double threshold = 50;
+        double error = leftFront.getCurrentPosition() - startPosition;
+        double kp = 0.5;
+        double effort;
+        while (Math.abs(error) - encoderTicks < threshold && opMode.opModeIsActive()) {
+            error = error/encoderTicks;
+            effort = kp * error;
+            if(effort < 0) {
+                resetWheels();
+                leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+                rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
+                leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
+                rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
+
+                leftFront.setPower(Math.abs(effort));
+                rightFront.setPower(Math.abs(effort));
+                leftBack.setPower(Math.abs(effort));
+                rightBack.setPower(Math.abs(effort));
+
+            }else {
+                resetWheels();
+                leftFront.setDirection(DcMotorSimple.Direction.FORWARD);
+                rightFront.setDirection(DcMotorSimple.Direction.FORWARD);
+                leftBack.setDirection(DcMotorSimple.Direction.FORWARD);
+                rightBack.setDirection(DcMotorSimple.Direction.FORWARD);
+
+                leftFront.setPower(effort);
+                rightFront.setPower(effort);
+                leftBack.setPower(effort);
+                rightBack.setPower(effort);
+            }
             telemetry.addData("encoder ticks", leftFront.getCurrentPosition());
             telemetry.addData("p1", p1);
             telemetry.addData("p2", p2);

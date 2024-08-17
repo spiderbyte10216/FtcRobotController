@@ -42,7 +42,7 @@ public class WorkshopAuto extends LinearOpMode {
             telemetry.update();
 
             //TODO - change this
-            AprilTagPoseFtc aprilTagPosition = workshopAprilTag.getPosition();
+            AprilTagPoseFtc aprilTagPosition = workshopAprilTag.getPosition(telemetry);
             NormalizedRGBA colors = workshopColorSensor.getColors();
         }
     }

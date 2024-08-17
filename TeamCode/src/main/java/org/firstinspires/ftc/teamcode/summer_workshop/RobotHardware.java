@@ -6,11 +6,16 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class RobotHardware {
 
     //TODO - change this
-    public DcMotor motor   = null;
-    public Servo   servo = null;
+    public DcMotor leftFront = null;
+    public DcMotor leftBack = null;
+    public DcMotor rightFront = null;
+    public DcMotor rightBack = null;
 
-    public RobotHardware(DcMotor motor, Servo servo){
-        this.motor = motor;
-        this.servo = servo;
+    public RobotHardware(DcMotor leftFront, DcMotor leftBack, DcMotor rightFront, DcMotor rightBack){
+        this.leftFront = leftFront;
+        this.leftBack = leftBack;
+        this.rightFront = rightFront;
+        this.rightBack = rightBack;
+
     }
 }

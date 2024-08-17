@@ -13,14 +13,20 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagPoseFtc;
 @Autonomous(name="Summer Workshop 2024", group="Robot")
 public class WorkshopAuto extends LinearOpMode {
 
+
+
     @Override
     public void runOpMode() {
 
         // Initialize the drive system variables.
-        DcMotor motor  = hardwareMap.get(DcMotor.class, "motor");
-        Servo servo  = hardwareMap.get(Servo.class, "servo");
-        RobotHardware robotHardware = new RobotHardware(motor, servo);
-        DriveTrain driveTrain; //TODO - change this
+        DcMotor leftFront = hardwareMap.get(DcMotor.class, "left_front");
+        DcMotor leftBack = hardwareMap.get(DcMotor.class, "left_back");
+        DcMotor rightFront = hardwareMap.get(DcMotor.class, "right_front");
+        DcMotor rightBack = hardwareMap.get(DcMotor.class, "right_back");
+
+        RobotHardware robotHardware = new RobotHardware(leftFront,leftBack,rightFront,rightBack);
+        DriveTrain driveTrain = new SpiderBitsDriveTrain();
+
 
         NormalizedColorSensor colorSensor = hardwareMap.get(NormalizedColorSensor.class, "color_sensor");
         WorkshopColorSensor workshopColorSensor = new WorkshopColorSensor(colorSensor);

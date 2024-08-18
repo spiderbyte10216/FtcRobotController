@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.summer_workshop;
 
+import android.annotation.SuppressLint;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -15,7 +17,6 @@ import java.util.List;
 public class WorkshopAprilTag {
 
     private AprilTagProcessor aprilTag = null;
-    private VisionPortal visionPortal = null;
 
     public WorkshopAprilTag(WebcamName webcam) {
 
@@ -40,7 +41,7 @@ public class WorkshopAprilTag {
         builder.addProcessor(aprilTag);
 
         // Build the Vision Portal, using the above settings.
-        visionPortal = builder.build();
+        VisionPortal visionPortal = builder.build();
 
         // Disable or re-enable the aprilTag processor at any time.
         visionPortal.setProcessorEnabled(aprilTag, true);
@@ -48,6 +49,7 @@ public class WorkshopAprilTag {
     }
 
 
+    @SuppressLint("DefaultLocale")
     public AprilTagPoseFtc getPosition(Telemetry telemetry) {
         AprilTagPoseFtc pose = null;
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
@@ -73,4 +75,9 @@ public class WorkshopAprilTag {
         telemetry.addLine("RBE = Range, Bearing & Elevation");
         return pose;
     }
+
+    public double getScreenWidth(){
+        return 640.0;
+    }
+
 }

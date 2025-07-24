@@ -23,12 +23,10 @@ public class MotorOnUChannel extends LinearOpMode {
         telemetry.addData("Status", "Initializing...");
         telemetry.update();
 
-        // Initialize drivetrain motors
+        //initialize motor
         uChannel = hardwareMap.get(DcMotor.class, "uChannel");
-        //right = hardwareMap.get(DcMotor.class, "Right");
 
         uChannel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        //right.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         uChannel.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -39,9 +37,21 @@ public class MotorOnUChannel extends LinearOpMode {
         runtime.reset();
 
         while (opModeIsActive()) {
+            //MOTOR SPIN COUNTER-CLOCKWISE
             if (gamepad1.x) {
                 uChannel.setPower(1);
+                telemetry.addData("motor spin counter-clockwise", "clicked");
             }
+            //MOTOR SPIN CLOCKWISE
+            else if (gamepad1.y) {
+                uChannel.setPower(-1);
+                telemetry.addData("motor spin clockwise", "clicked");
+            }
+            //MOTOR STOP
+            else {
+                uChannel.setPower(0);
+            }
+            telemetry.update();
         }
     }
 }

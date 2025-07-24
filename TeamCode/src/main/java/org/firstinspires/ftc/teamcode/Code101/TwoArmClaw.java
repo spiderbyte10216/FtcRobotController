@@ -27,7 +27,7 @@ public class TwoArmClaw extends LinearOpMode{
         telemetry.addData("Status", "Initializing...");
         telemetry.update();
 
-        // Initialize claw servo
+        // Initialize claw servos
         claw20 = hardwareMap.get(Servo.class, "claw20");
         claw21 = hardwareMap.get(Servo.class, "claw21");
 
@@ -38,19 +38,16 @@ public class TwoArmClaw extends LinearOpMode{
         waitForStart();
         runtime.reset();
 
-        claw20.setPosition(0.0);
-        claw21.setPosition(1.0);
-
         while (opModeIsActive()) {
             telemetry.addData("Loop running", true);
             if (gamepad1.right_bumper){
-                claw20.setPosition(0.5);
-                claw21.setPosition(0.5);
+                claw20.setPosition(0.0);
+                claw21.setPosition(1.0);
                 telemetry.addData("Claw open","Clicked");
            }
             if (gamepad1.left_bumper) {
-                claw20.setPosition(0.0);
-                claw21.setPosition(1.0);
+                claw20.setPosition(0.5);
+                claw21.setPosition(0.5);
                 telemetry.addData("Claw close","Clicked");
             }
             telemetry.update();

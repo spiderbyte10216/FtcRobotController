@@ -1,52 +1,57 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.util.ElapsedTime;
+// --- IMPORTS ---
+import com.acmerobotics.dashboard.FtcDashboard;                // For using FTC Dashboard
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry; // For showing telemetry on both driver station and dashboard
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;   // Basic OpMode structure
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;         // Lets the code run as a TeleOp
+import com.qualcomm.robotcore.hardware.DcMotor;                // For using motors
+import com.qualcomm.robotcore.hardware.DcMotorSimple;          // For motor direction control
+import com.qualcomm.robotcore.util.ElapsedTime;                // Timer
 
-@TeleOp(name = "LiftingArmWithTorque")
+// --- TELEOP NAME ---
+
 public class LiftingArmWithTorque extends LinearOpMode {
-    private DcMotor liftArm;
-    private ElapsedTime runtime = new ElapsedTime();
-    public FtcDashboard ftcDashboard;
+
+    // --- VARIABLES ---
+    // Make a DcMotor called liftArm
+    // Make a timer called runtime
+    // Make a dashboard variable called ftcDashboard
 
     @Override
     public void runOpMode() {
-        this.ftcDashboard = FtcDashboard.getInstance();
-        this.telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
+        // --- SETUP DASHBOARD ---
+        // Connect the dashboard to telemetry
 
-        telemetry.addData("Status", "Initializing...");
-        telemetry.update();
+        // --- SHOW "INITIALIZING" ON DRIVER STATION ---
+        // Tell the driver the robot is starting up
 
-        // Initialize drivetrain motors
-        liftArm = hardwareMap.get(DcMotor.class, "liftArm");
-        //right = hardwareMap.get(DcMotor.class, "Right");
+        // --- CONNECT HARDWARE ---
+        // Link liftArm to a motor from the config
 
-        liftArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        //right.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        // --- SET MOTOR MODE AND DIRECTION ---
+        // Set motor to run without encoders
+        // Set motor direction (FORWARD or REVERSE)
 
-        liftArm.setDirection(DcMotorSimple.Direction.REVERSE);
+        // --- SHOW "READY" ON DRIVER STATION ---
+        // Tell the driver the robot is ready
 
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
+        // --- WAIT FOR START BUTTON ---
+        // Pause until the match starts
 
-        waitForStart();
-        runtime.reset();
+        // --- RESET TIMER ---
+        // Reset the runtime clock
 
+        // --- MAIN LOOP ---
         while (opModeIsActive()) {
-            if (gamepad1.dpad_up) {
-                liftArm.setPower(0.3);
-            } else if (gamepad1.dpad_down)  {
-                liftArm.setPower(-0.3);
-            } else {
-                liftArm.setPower(0.0);
-            }
+            // --- GAMEPAD CONTROLS ---
+            // If D-pad up is pressed, move arm up
+            // If D-pad down is pressed, move arm down
+            // Else, stop the motor
 
+            // --- UPDATE TELEMETRY ---
+            // Show info on the driver station
         }
     }
 }

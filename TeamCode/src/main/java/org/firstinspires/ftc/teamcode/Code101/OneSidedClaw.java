@@ -1,50 +1,51 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.hardware.Servo;
+// --- IMPORTS ---
+import com.acmerobotics.dashboard.FtcDashboard;             // For using FTC Dashboard
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry; // For showing telemetry on both driver station and dashboard
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode; // Basic OpMode structure
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;       // Lets the code run as a TeleOp
+import com.qualcomm.robotcore.util.ElapsedTime;              // Timer
+import com.qualcomm.robotcore.hardware.Servo;                // For controlling servos
 
-@TeleOp(name = "OneSidedClaw")
-public class OneSidedClaw extends LinearOpMode{
+// --- TELEOP NAME ---
 
-    private ElapsedTime runtime = new ElapsedTime();
-    public FtcDashboard ftcDashboard;
+public class OneSidedClaw extends LinearOpMode {
 
-    private Servo claw1;
+    // --- VARIABLES ---
+    // Make a timer called runtime
+    // Make a dashboard variable called ftcDashboard
+    // Make a servo called claw1
+
     @Override
     public void runOpMode() {
-        this.ftcDashboard = FtcDashboard.getInstance();
-        this.telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
+        // --- SETUP DASHBOARD ---
+        // Connect the dashboard to telemetry
 
-        telemetry.addData("Status", "Initializing...");
-        telemetry.update();
+        // --- SHOW "INITIALIZING" ON DRIVER STATION ---
+        // Tell the driver the robot is starting up
 
-        // Initialize claw servo
-        claw1 = hardwareMap.get(Servo.class, "claw1");
+        // --- CONNECT HARDWARE ---
+        // Link claw1 to the servo from the config
 
+        // --- SHOW "READY" ON DRIVER STATION ---
+        // Tell the driver the robot is ready
 
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
+        // --- WAIT FOR START BUTTON ---
+        // Pause until the match starts
 
-        waitForStart();
-        runtime.reset();
+        // --- RESET TIMER ---
+        // Reset the runtime clock
 
+        // --- MAIN LOOP ---
         while (opModeIsActive()) {
-            //OPEN CLAW
-            if (gamepad1.a) {
-                claw1.setPosition(0.75);
-                telemetry.addData("claw open", "clicked");
-            }
-            //CLOSE CLAW
-            else if (gamepad1.b) {
-                claw1.setPosition(0.25);
-                telemetry.addData("claw close", "clicked");
-            }
-            telemetry.update();
+            // --- GAMEPAD CONTROLS ---
+            // If A is pressed, open the claw
+            // If B is pressed, close the claw
+
+            // --- UPDATE TELEMETRY ---
+            // Show info on the driver station
         }
     }
 }

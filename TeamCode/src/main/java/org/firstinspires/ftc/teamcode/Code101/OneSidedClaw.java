@@ -33,13 +33,14 @@ public class OneSidedClaw extends LinearOpMode{
         waitForStart();
         runtime.reset();
 
-        claw1.setPosition(0.0);
-
         while (opModeIsActive()) {
+            //OPEN CLAW
             if (gamepad1.a) {
                 claw1.setPosition(0.75);
                 telemetry.addData("claw open", "clicked");
-            } else if (gamepad1.b) {
+            }
+            //CLOSE CLAW
+            else if (gamepad1.b) {
                 claw1.setPosition(0.25);
                 telemetry.addData("claw close", "clicked");
             }
